@@ -4,6 +4,8 @@ The ground truth of two datasets:
 
 1. Empirical dataset; 2. Fan et al's dataset are included.
 
+These two dataset files contain the ground truth, you are encouraged to try out your own locators with them. For apk files downloading/transmission, contact anchor-locator@gmail.com.
+
 Essential Key-value pairs:
 
 {
