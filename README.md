@@ -22,7 +22,7 @@ Essential Key-value pairs:
 
 "trace": stack trace,
 
-"year": year of issue,
+"year": year of issue (only Fan et al's dataset),
 
 "crashLog": raw crash message,
 
