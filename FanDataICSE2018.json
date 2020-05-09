@@ -21,9 +21,11 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2015-10-15T16:49:20Z",
   "crashLog": "Noticed on PlayStore, version `1.2.0.34`:\n\n``` text\nandroid.view.WindowManager$BadTokenException: Unable to add window android.view.ViewRootImpl$W@2fcaa65 -- permission denied for this window type\n       at android.view.ViewRootImpl.setView(ViewRootImpl.java:591)\n       at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:310)\n       at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:85)\n       at android.app.Dialog.show(Dialog.java:319)\n       at com.zeapo.pwdstore.autofill.AutofillService.onAccessibilityEvent(AutofillService.java:181)\n       at android.accessibilityservice.AccessibilityService$1.onAccessibilityEvent(AccessibilityService.java:658)\n       at android.accessibilityservice.AccessibilityService$IAccessibilityServiceClientWrapper.executeMessage(AccessibilityService.java:751)\n       at com.android.internal.os.HandlerCaller$MyHandler.handleMessage(HandlerCaller.java:37)\n       at android.os.Handler.dispatchMessage(Handler.java:102)\n       at android.os.Looper.loop(Looper.java:148)\n       at android.app.ActivityThread.main(ActivityThread.java:5417)\n       at java.lang.reflect.Method.invoke(Method.java)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)\n```\nhttps://github.com/zeapo/Android-Password-Store/issues/138",
   "real": "com.zeapo.pwdstore.autofill.AutofillService.onAccessibilityEvent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -51,9 +53,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-01-24T08:57:22Z",
   "crashLog": "Similar, but not a duplicate, of #2365.\n\n```\njava.lang.IllegalArgumentException: View not attached to window manager\n   at android.view.WindowManagerGlobal.findViewLocked(WindowManagerGlobal.java:402)\n   at android.view.WindowManagerGlobal.removeView(WindowManagerGlobal.java:304)\n   at android.view.WindowManagerImpl.removeView(WindowManagerImpl.java:79)\n   at android.app.Dialog.dismissDialog(Dialog.java:325)\n   at android.app.Dialog.dismiss(Dialog.java:307)\n   at cgeo.geocaching.activity.Progress.dismiss(Progress.java:31)\n   at cgeo.geocaching.utils.AsyncTaskWithProgress.onPostExecute(AsyncTaskWithProgress.java:97)\n   at android.os.AsyncTask.finish(AsyncTask.java:631)\n   at android.os.AsyncTask.access$600(AsyncTask.java:177)\n   at android.os.AsyncTask$InternalHandler.handleMessage(AsyncTask.java:644)\n   at android.os.Handler.dispatchMessage(Handler.java:99)\n   at android.os.Looper.loop(Looper.java:137)\n   at android.app.ActivityThread.main(ActivityThread.java:5279)\n   at java.lang.reflect.Method.invokeNative(Native Method)\n   at java.lang.reflect.Method.invoke(Method.java:511)\n   at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1102)\n   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:869)\n   at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/cgeo/cgeo/issues/3570",
   "real": "cgeo.geocaching.activity.Progress.dismiss",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -79,9 +83,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-05-10T15:58:41Z",
   "crashLog": "Don't want to be annoying but in a special cases blocking a contact results in an app crash:\nTo reproduce:\n- go offline\n- open a chat and block the user\n- go back to conversation list and go online again\n- wait some seconds... bamm!\n\n```\njava.lang.IllegalStateException: Fragment ComposeMessageFragment{a5744348} not attached to Activity\n    at android.support.v4.app.Fragment.getResources(Fragment.java:636)\n    at android.support.v4.app.Fragment.getText(Fragment.java:648)\n    at org.kontalk.ui.ComposeMessageFragment.updateUI(ComposeMessageFragment.java:2732)\n    at org.kontalk.ui.ComposeMessageFragment.access$2200(ComposeMessageFragment.java:150)\n    at org.kontalk.ui.ComposeMessageFragment$22.onReceive(ComposeMessageFragment.java:1903)\n    at android.support.v4.content.LocalBroadcastManager.executePendingBroadcasts(LocalBroadcastManager.java:297)\n    at android.support.v4.content.LocalBroadcastManager.access$000(LocalBroadcastManager.java:46)\n    at android.support.v4.content.LocalBroadcastManager$1.handleMessage(LocalBroadcastManager.java:116)\n    at android.os.Handler.dispatchMessage(Handler.java:102)\n    at android.os.Looper.loop(Looper.java:136)\n    at android.app.ActivityThread.main(ActivityThread.java:5001)\n    at java.lang.reflect.Method.invokeNative(Native Method)\n    at java.lang.reflect.Method.invoke(Method.java:515)\n    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:785)\n    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:601)\n    at dalvik.system.NativeStart.main(Native Method)\n```\n\n(and if this is caught the next NPE is thrown by `Toast.makeText()`)\n\nI get the problem: the broadcast receiver gets the intent after the ui view was already changed, i.e. the fragment isn't added to the activity anymore.\nBut what is the best solution? Quickfix is\n\n```\n        if (mPrivacyListener != null) {\n            mLocalBroadcastManager.unregisterReceiver(mPrivacyListener);\n            mPrivacyListener = null;\n        }\n```\n\nin `onPause()`. But when going online and immediately going back to the conversation the view is not updated.\nhttps://github.com/kontalk/androidclient/issues/723",
   "real": "org.kontalk.ui.ComposeMessageFragment.updateUI",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -104,9 +110,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2014-01-08T12:22:18Z",
   "crashLog": "Every once in a while, some formatting using `String.format()` and a zeroed coordinate seems to generate bad characters (here, we get `-0.00*`).\n\n```\nandroid.database.sqlite.SQLiteException: near \"and\": syntax error: , while compiling: SELECT cg_waypoints._id , cg_waypoints.geocode , cg_waypoints.updated , cg_waypoints.type , cg_waypoints.prefix , cg_waypoints.lookup , cg_waypoints.name , cg_waypoints.latlon , cg_waypoints.latitude , cg_waypoints.longitude , cg_waypoints.note , cg_waypoints.own , cg_waypoints.visited FROM cg_waypoints, cg_caches WHERE cg_waypoints.geocode == cg_caches.geocode and cg_waypoints.latitude >= -0.020859500000000003 and cg_waypoints.latitude <= -0.00* and cg_waypoints.longitude >= 0.005064000000000001 and cg_waypoints.longitude <= 0.0127)\n   at android.database.sqlite.SQLiteCompiledSql.native_compile(Native Method)\n   at android.database.sqlite.SQLiteCompiledSql.compile(SQLiteCompiledSql.java:92)\n   at android.database.sqlite.SQLiteCompiledSql.<init>(SQLiteCompiledSql.java:65)\n   at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:83)\n   at android.database.sqlite.SQLiteQuery.<init>(SQLiteQuery.java:49)\n   at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:42)\n   at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1356)\n   at android.database.sqlite.SQLiteDatabase.rawQuery(SQLiteDatabase.java:1324)\n   at cgeo.geocaching.DataStore.loadWaypoints(DataStore.java:2892)\n   at cgeo.geocaching.maps.CGeoMap$LoadRunnable.run(CGeoMap.java:1133)\n   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1088)\n   at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:581)\n   at java.lang.Thread.run(Thread.java:1019)\n```\nhttps://github.com/cgeo/cgeo/issues/3527",
   "real": "cgeo.geocaching.DataStore.loadWaypoints",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.SecurityException",
@@ -136,9 +144,11 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2016-05-13T08:24:00Z",
   "crashLog": " java.lang.SecurityException: No persistable permission grants found for UID 10187 and Uri 0 @ content://media/external/images/media/34906\n       at android.os.Parcel.readException(Parcel.java:1540)\n       at android.os.Parcel.readException(Parcel.java:1493)\n       at android.app.ActivityManagerProxy.takePersistableUriPermission(ActivityManagerNative.java:3918)\n       at android.content.ContentResolver.takePersistableUriPermission(ContentResolver.java:1682)\n       at org.kontalk.util.MediaStorage.requestPersistablePermissions(MediaStorage.java:585)\n       at org.kontalk.ui.ComposeMessageFragment.onActivityResult(ComposeMessageFragment.java:1483)\n       at android.support.v4.app.FragmentActivity.onActivityResult(FragmentActivity.java:176)\n       at org.kontalk.ui.ComposeMessage.onActivityResult(ComposeMessage.java:299)\n       at android.app.Activity.dispatchActivityResult(Activity.java:6181)\n       at android.app.ActivityThread.deliverResults(ActivityThread.java:3572)\n       at android.app.ActivityThread.handleSendResult(ActivityThread.java:3619)\n       at android.app.ActivityThread.access$1300(ActivityThread.java:149)\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1338)\n       at android.os.Handler.dispatchMessage(Handler.java:102)\n       at android.os.Looper.loop(Looper.java:135)\n       at android.app.ActivityThread.main(ActivityThread.java:5258)\n       at java.lang.reflect.Method.invoke(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:372)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:905)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:700)\n```\n\nProbably using `takePersistableUriPermission` with `ACTION_IMAGE_CAPTURE` ([see this question](http://stackoverflow.com/a/34665204/1045199)).\nhttps://github.com/kontalk/androidclient/issues/734",
   "real": "org.kontalk.ui.ComposeMessageFragment.onActivityResult",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.CursorIndexOutOfBoundsException",
@@ -168,9 +178,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-09-07T08:10:08Z",
   "crashLog": " android.database.CursorIndexOutOfBoundsException: Index 0 requested, with a size of 0\n       at android.database.AbstractCursor.checkPosition(AbstractCursor.java:432)\n       at android.database.AbstractWindowedCursor.checkPosition(AbstractWindowedCursor.java:136)\n       at android.database.AbstractWindowedCursor.getString(AbstractWindowedCursor.java:50)\n       at android.database.CursorWrapper.getString(CursorWrapper.java:114)\n       at org.kontalk.ui.ComposeMessageFragment.onActivityResult(ComposeMessageFragment.java:1533)\n       at android.support.v4.app.FragmentActivity.onActivityResult(FragmentActivity.java:175)\n       at org.kontalk.ui.ComposeMessage.onActivityResult(ComposeMessage.java:299)\n       at android.app.Activity.dispatchActivityResult(Activity.java:5440)\n       at android.app.ActivityThread.deliverResults(ActivityThread.java:3363)\n       at android.app.ActivityThread.handleSendResult(ActivityThread.java:3410)\n       at android.app.ActivityThread.access$1300(ActivityThread.java:141)\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1260)\n       at android.os.Handler.dispatchMessage(Handler.java:102)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5052)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:793)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:609)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/kontalk/androidclient/issues/808",
   "real": "org.kontalk.ui.ComposeMessageFragment.onActivityResult",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -193,9 +205,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-04-29T02:57:13Z",
   "crashLog": "```\njava.lang.IllegalStateException: Content view not yet created\n       at android.support.v4.app.ListFragment.ensureList(ListFragment.java:328)\n       at android.support.v4.app.ListFragment.getListView(ListFragment.java:222)\n       at org.wordpress.android.ui.notifications.NotificationsListFragment.setNoteSelected(NotificationsListFragment.java:118)\n       at org.wordpress.android.ui.notifications.NotificationsActivity$2$1.run(NotificationsActivity.java:156)\n       at android.os.Handler.handleCallback(Handler.java:733)\n       at android.os.Handler.dispatchMessage(Handler.java:95)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5017)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1321",
   "real": "org.wordpress.android.ui.notifications.NotificationsListFragment.setNoteSelected",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.res.Resources$NotFoundException",
@@ -208,9 +222,11 @@
    "android.content.res.Resources.getQuantityString",
    "org.kontalk.ui.ConversationListFragment.onItemCheckedStateChanged"
   ],
+  "year": "2017-01-12T22:14:08Z",
   "crashLog": "Bad plural translations will cause crashes in some cases (unknown language):\r\n\r\n```\r\nandroid.content.res.Resources$NotFoundException: Plural resource ID #0x7f0b0001 quantity=1 item=other\r\n       at android.content.res.Resources.getQuantityText(Resources.java:411)\r\n       at android.content.res.Resources.getQuantityString(Resources.java:521)\r\n       at org.kontalk.ui.ConversationListFragment.onItemCheckedStateChanged(ConversationListFragment.java:231)\r\n```\r\n\r\nFill in (and mark with *need review*) strings in all language until lint clears of all the errors.https://github.com/kontalk/androidclient/issues/930",
   "real": "org.kontalk.ui.ConversationListFragment.onItemCheckedStateChanged",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -235,9 +251,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2015-02-26T08:52:10Z",
   "crashLog": "```\njava.lang.IllegalStateException: Can not perform this action after onSaveInstanceState\n       at android.app.FragmentManagerImpl.checkStateLoss(FragmentManager.java:1323)\n       at android.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1341)\n       at android.app.FragmentManagerImpl.popBackStack(FragmentManager.java:484)\n       at org.wordpress.android.ui.WPDrawerActivity$4.onClick(WPDrawerActivity.java:294)\n       at android.view.View.performClick(View.java:4456)\n       at android.view.View$PerformClick.run(View.java:18465)\n       at android.os.Handler.handleCallback(Handler.java:733)\n       at android.os.Handler.dispatchMessage(Handler.java:95)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5086)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:785)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:601)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/2372",
   "real": "Resource XML",
-  "category": "res"
+  "category": "res",
+  "realCate": "C"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -257,9 +275,12 @@
    "android.support.v4.app.Fragment.startActivityForResult",
    "org.kontalk.ui.prefs.AppearanceFragment$2.onPreferenceClick"
   ],
+  "year": "2016-11-18T22:48:07Z",
   "crashLog": "```\r\nFatal Exception: android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.GET_CONTENT cat=[android.intent.category.OPENABLE] typ=image/* }\r\n       at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1512)\r\n       at android.app.Instrumentation.execStartActivity(Instrumentation.java:1384)\r\n       at android.app.Activity.startActivityForResult(Activity.java:3195)\r\n       at android.support.v4.app.FragmentActivity.startActivityForResult(FragmentActivity.java:842)\r\n       at android.support.v4.app.ActivityCompat.startActivityForResult(ActivityCompat.java:164)\r\n       at android.support.v4.app.FragmentActivity.startActivityFromFragment(FragmentActivity.java:921)\r\n       at android.support.v4.app.FragmentActivity$HostCallbacks.onStartActivityFromFragment(FragmentActivity.java:1009)\r\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:940)\r\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:929)\r\n       at org.kontalk.ui.prefs.AppearanceFragment$2.onPreferenceClick(AppearanceFragment.java:68)\r\n```https://github.com/kontalk/androidclient/issues/860",
+  "estimatedCate": "A",
   "real": "org.kontalk.ui.prefs.AppearanceFragment$2.onPreferenceClick",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -285,9 +306,12 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-08-30T10:35:37Z",
   "crashLog": "Sometimes, the handler receives messages while the view has been detached from the window manager.\n\n```\njava.lang.IllegalArgumentException: View not attached to window manager\n   at android.view.WindowManagerImpl.findViewLocked(WindowManagerImpl.java:599)\n   at android.view.WindowManagerImpl.removeView(WindowManagerImpl.java:336)\n   at android.view.WindowManagerImpl$CompatModeWrapper.removeView(WindowManagerImpl.java:151)\n   at android.app.Dialog.dismissDialog(Dialog.java:321)\n   at android.app.Dialog$1.run(Dialog.java:119)\n   at android.app.Dialog.dismiss(Dialog.java:306)\n   at cgeo.geocaching.maps.CGeoMap$LoadDetailsHandler.handleRegularMessage(CGeoMap.java:289)\n   at cgeo.geocaching.utils.CancellableHandler.handleMessage(CancellableHandler.java:35)\n   at android.os.Handler.dispatchMessage(Handler.java:99)\n   at android.os.Looper.loop(Looper.java:137)\n   at android.app.ActivityThread.main(ActivityThread.java:4514)\n   at java.lang.reflect.Method.invokeNative(Native Method)\n   at java.lang.reflect.Method.invoke(Method.java:511)\n   at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:790)\n   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:557)\n   at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/cgeo/cgeo/issues/4274",
+  "estimatedCate": "A",
   "real": "cgeo.geocaching.maps.CGeoMap$LoadDetailsHandler.handleRegularMessage",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -314,9 +338,12 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2013-08-25T20:16:38Z",
   "crashLog": "This manifests itself as:\n\n```\nandroid.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.VIEW dat= }\n   at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1545)\n   at android.app.Instrumentation.execStartActivity(Instrumentation.java:1515)\n   at android.app.Activity.startActivityForResult(Activity.java:2988)\n   at android.support.v4.app.FragmentActivity.startActivityFromFragment(FragmentActivity.java:683)\n   at android.support.v4.app.Fragment.startActivity(Fragment.java:783)\n   at cgeo.geocaching.StatusFragment$StatusHandler$1.onClick(StatusFragment.java:101)\n   at android.view.View.performClick(View.java:2533)\n   at android.view.View$PerformClick.run(View.java:9320)\n   at android.os.Handler.handleCallback(Handler.java:587)\n   at android.os.Handler.dispatchMessage(Handler.java:92)\n   at android.os.Looper.loop(Looper.java:150)\n   at android.app.ActivityThread.main(ActivityThread.java:4385)\n   at java.lang.reflect.Method.invokeNative(Native Method)\n   at java.lang.reflect.Method.invoke(Method.java:507)\n   at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:849)\n   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:607)\n   at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/cgeo/cgeo/issues/3194#issuecomment-23234767",
+  "estimatedCate": "A",
   "real": "cgeo.geocaching.StatusFragment$StatusHandler$1.onClick",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -342,9 +369,12 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-04-29T02:53:16Z",
   "crashLog": "```\njava.lang.IllegalStateException: Can not perform this action after onSaveInstanceState\n       at android.support.v4.app.FragmentManagerImpl.checkStateLoss(FragmentManager.java:1343)\n       at android.support.v4.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1361)\n       at android.support.v4.app.BackStackRecord.commitInternal(BackStackRecord.java:595)\n       at android.support.v4.app.BackStackRecord.commit(BackStackRecord.java:574)\n       at org.wordpress.android.ui.notifications.NotificationsActivity.onPostClicked(NotificationsActivity.java:630)\n       at org.wordpress.android.ui.notifications.NotificationsActivity$1.notesLoaded(NotificationsActivity.java:116)\n       at org.wordpress.android.ui.notifications.NotificationsActivity$2$1.run(NotificationsActivity.java:162)\n       at android.os.Handler.handleCallback(Handler.java:733)\n       at android.os.Handler.dispatchMessage(Handler.java:95)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5017)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1320",
+  "estimatedCate": "A",
   "real": "org.wordpress.android.ui.notifications.NotificationsActivity.onPostClicked",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -377,9 +407,12 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-11-29T16:04:35Z",
   "crashLog": "We were checking if there is any email app before showing the magic link screen. Not sure if we removed this check or if there is a new bug.\r\n\r\n```\r\nFatal Exception: android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.MAIN cat=[android.intent.category.APP_EMAIL] }\r\n       at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1657)\r\n       at android.app.Instrumentation.execStartActivity(Instrumentation.java:1424)\r\n       at android.app.Activity.startActivityForResult(Activity.java:3456)\r\n       at android.support.v4.app.BaseFragmentActivityJB.startActivityForResult(BaseFragmentActivityJB.java:48)\r\n       at android.support.v4.app.FragmentActivity.startActivityForResult(FragmentActivity.java:77)\r\n       at android.app.Activity.startActivityForResult(Activity.java:3417)\r\n       at android.support.v4.app.FragmentActivity.startActivityForResult(FragmentActivity.java:859)\r\n       at android.app.Activity.startActivity(Activity.java:3653)\r\n       at android.app.Activity.startActivity(Activity.java:3621)\r\n       at org.wordpress.android.ui.accounts.login.MagicLinkSentFragment.openEmailClient(MagicLinkSentFragment.java:80)\r\n       at org.wordpress.android.ui.accounts.login.MagicLinkSentFragment.access$100(MagicLinkSentFragment.java:17)\r\n       at org.wordpress.android.ui.accounts.login.MagicLinkSentFragment$2.onClick(MagicLinkSentFragment.java:55)\r\n       at android.view.View.performClick(View.java:4240)\r\n       at android.view.View$PerformClick.run(View.java:17742)\r\n       at android.os.Handler.handleCallback(Handler.java:730)\r\n       at android.os.Handler.dispatchMessage(Handler.java:92)\r\n       at android.os.Looper.loop(Looper.java:137)\r\n       at android.app.ActivityThread.main(ActivityThread.java:5121)\r\n       at java.lang.reflect.Method.invokeNative(Method.java)\r\n       at java.lang.reflect.Method.invoke(Method.java:525)\r\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:787)\r\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:600)\r\n       at dalvik.system.NativeStart.main(NativeStart.java)\r\n```https://github.com/wordpress-mobile/WordPress-Android/issues/4845",
+  "estimatedCate": "A",
   "real": "org.wordpress.android.ui.accounts.login.MagicLinkSentFragment.openEmailClient",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -408,9 +441,12 @@
    "android.app.Activity.performResume",
    "android.app.ActivityThread.performResumeActivity"
   ],
+  "year": "2016-09-02T14:11:47Z",
   "crashLog": ": android.database.sqlite.SQLiteException: no such table: layer_20160902160444284 (code 1)\n    at android.database.sqlite.SQLiteConnection.nativeExecuteForCursorWindow(Native Method)\n    at android.database.sqlite.SQLiteConnection.executeForCursorWindow(SQLiteConnection.java:845)\n    at android.database.sqlite.SQLiteSession.executeForCursorWindow(SQLiteSession.java:836)\n    at android.database.sqlite.SQLiteQuery.fillWindow(SQLiteQuery.java:62)\n    at android.database.sqlite.SQLiteCursor.fillWindow(SQLiteCursor.java:144)\n    at android.database.sqlite.SQLiteCursor.getCount(SQLiteCursor.java:133)\n    at com.nextgis.mobile.fragment.AttributesFragment.setAttributes(AttributesFragment.java:229)\n    at com.nextgis.mobile.fragment.AttributesFragment.onResume(AttributesFragment.java:154)\n    at android.support.v4.app.Fragment.performResume(Fragment.java:2120)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1147)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1286)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1268)\n    at android.support.v4.app.FragmentManagerImpl.dispatchResume(FragmentManager.java:2153)\n    at android.support.v4.app.FragmentController.dispatchResume(FragmentController.java:223)\n    at android.support.v4.app.FragmentActivity.onResumeFragments(FragmentActivity.java:522)\n    at android.support.v4.app.FragmentActivity.onPostResume(FragmentActivity.java:511)\n    at android.support.v7.app.AppCompatActivity.onPostResume(AppCompatActivity.java:178)\n    at android.app.Activity.performResume(Activity.java:5411)\n    at android.app.ActivityThread.performResumeActivity(ActivityThread.java:2778)\n    ... 10 more\n```\n\nMaybe layer was deleted but accessed asynchronously from another thread (rendering?). \nhttps://github.com/nextgis/android_gisapp/issues/493",
+  "estimatedCate": "A",
   "real": "com.nextgis.mobile.fragment.AttributesFragment.setAttributes",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -433,9 +469,12 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2015-07-19T11:25:04Z",
   "crashLog": "Damn fragments...\n\n```\njava.lang.IllegalStateException: Fragment ComposeMessageFragment{13eb01fa} not attached to Activity\n     at android.support.v4.app.Fragment.getResources(Fragment.java:619)\n     at android.support.v4.app.Fragment.getString(Fragment.java:641)\n     at org.kontalk.ui.ComposeMessageFragment$15.onReceive(ComposeMessageFragment.java:1928)\n     at android.support.v4.content.LocalBroadcastManager.executePendingBroadcasts(LocalBroadcastManager.java:297)\n     at android.support.v4.content.LocalBroadcastManager.access$000(LocalBroadcastManager.java:46)\n     at android.support.v4.content.LocalBroadcastManager$1.handleMessage(LocalBroadcastManager.java:116)\n     at android.os.Handler.dispatchMessage(Handler.java:102)\n     at android.os.Looper.loop(Looper.java:135)\n     at android.app.ActivityThread.main(ActivityThread.java:5343)\n     at java.lang.reflect.Method.invoke(Native Method)\n     at java.lang.reflect.Method.invoke(Method.java:372)\n     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:905)\n     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:700)\n```\n\nThanks to @M4v3r1cK87 for reporting.\nhttps://github.com/kontalk/androidclient/issues/510",
+  "estimatedCate": "A",
   "real": "org.kontalk.ui.ComposeMessageFragment$15.onReceive",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.view.ViewRootImpl$CalledFromWrongThreadException",
@@ -485,9 +524,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2015-04-13T11:16:07Z",
   "crashLog": ": pool-3-thread-1\nE/AndroidRuntime( 3626): android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.\nE/AndroidRuntime( 3626):    at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:4876)\nE/AndroidRuntime( 3626):    at android.view.ViewRootImpl.requestLayout(ViewRootImpl.java:948)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.widget.RelativeLayout.requestLayout(RelativeLayout.java:292)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.widget.AbsListView.requestLayout(AbsListView.java:2126)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.widget.RelativeLayout.requestLayout(RelativeLayout.java:292)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.widget.RelativeLayout.requestLayout(RelativeLayout.java:292)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.widget.RelativeLayout.requestLayout(RelativeLayout.java:292)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.requestLayout(View.java:15245)\nE/AndroidRuntime( 3626):    at android.view.View.setFlags(View.java:8400)\nE/AndroidRuntime( 3626):    at android.view.View.setVisibility(View.java:5590)\nE/AndroidRuntime( 3626):    at android.widget.ImageView.setVisibility(ImageView.java:1155)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.components.ForegroundImageView.hide(Unknown Source)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.ConversationItem$SlideDeckListener.onSuccess(Unknown Source)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.ConversationItem$SlideDeckListener.onSuccess(Unknown Source)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.util.ListenableFutureTask.callback(Unknown Source)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.util.ListenableFutureTask.callback(Unknown Source)\nE/AndroidRuntime( 3626):    at org.thoughtcrime.securesms.util.ListenableFutureTask.done(Unknown Source)\nE/AndroidRuntime( 3626):    at java.util.concurrent.FutureTask$Sync.innerSet(FutureTask.java:252)\nE/AndroidRuntime( 3626):    at java.util.concurrent.FutureTask.set(FutureTask.java:112)\nE/AndroidRuntime( 3626):    at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:310)\nE/AndroidRuntime( 3626):    at java.util.concurrent.FutureTask.run(FutureTask.java:137)\nE/AndroidRuntime( 3626):    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1076)\nE/AndroidRuntime( 3626):    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:569)\nE/AndroidRuntime( 3626):    at java.lang.Thread.run(Thread.java:856)\n```\nhttps://github.com/WhisperSystems/Signal-Android/issues/2966#issuecomment-92317259",
   "real": "org.thoughtcrime.securesms.ConversationItem$SlideDeckListener.onSuccess",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.view.ViewRoot$CalledFromWrongThreadException",
@@ -512,9 +553,11 @@
    "cgeo.geocaching.cgeocaches.access$18",
    "cgeo.geocaching.cgeocaches$DropDetailsThread.run"
   ],
+  "year": "2012-05-05T00:23:30Z",
   "crashLog": ": Thread-33\n android.view.ViewRoot$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.\n    at android.view.ViewRoot.checkThread(ViewRoot.java:2802)\n    at android.view.ViewRoot.invalidateChild(ViewRoot.java:607)\n    at android.view.ViewRoot.invalidateChildInParent(ViewRoot.java:633)\n    at android.view.ViewGroup.invalidateChild(ViewGroup.java:2505)\n    at android.view.View.invalidate(View.java:5119)\n    at cgeo.geocaching.ui.CompassMiniView.updateDirection(CompassMiniView.java:123)\n    at cgeo.geocaching.ui.CompassMiniView.updateAzimuth(CompassMiniView.java:96)\n    at cgeo.geocaching.ui.CacheListAdapter.setActualHeading(CacheListAdapter.java:278)\n    at cgeo.geocaching.cgeocaches.updateDirection(cgeocaches.java:1441)\n    at cgeo.geocaching.cgeocaches.update(cgeocaches.java:1407)\n    at cgeo.geocaching.utils.MemorySubject.addObserver(MemorySubject.java:24)\n    at cgeo.geocaching.cgeoapplication.addDirectionObserver(cgeoapplication.java:135)\n    at cgeo.geocaching.cgeocaches.startGeoAndDir(cgeocaches.java:1250)\n    at cgeo.geocaching.cgeocaches.access$18(cgeocaches.java:1247)\n    at cgeo.geocaching.cgeocaches$DropDetailsThread.run(cgeocaches.java:1789)\n```\n\nI have confirmed this when dropping more than one cache.\nhttps://github.com/cgeo/cgeo/issues/1503",
   "real": "cgeo.geocaching.ui.CacheListAdapter.setActualHeading",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -539,9 +582,11 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2016-12-06T07:01:58Z",
   "crashLog": "```\r\nFatal Exception: java.lang.IllegalStateException: Fragment SignInFragment{5c59e3a} not attached to Activity\r\n       at android.support.v4.app.Fragment.getResources(Fragment.java:651)\r\n       at android.support.v4.app.Fragment.getString(Fragment.java:673)\r\n       at org.wordpress.android.ui.accounts.SignInFragment.showSelfHostedSignInForm(SignInFragment.java:369)\r\n       at org.wordpress.android.ui.accounts.SignInFragment$14.onResponse(SignInFragment.java:925)\r\n       at org.wordpress.android.ui.accounts.SignInFragment$14.onResponse(SignInFragment.java:908)\r\n       at com.wordpress.rest.RestRequest.deliverResponse(RestRequest.java:76)\r\n       at com.wordpress.rest.RestRequest.deliverResponse(RestRequest.java:19)\r\n       at com.android.volley.ExecutorDelivery$ResponseDeliveryRunnable.run(ExecutorDelivery.java:99)\r\n       at android.os.Handler.handleCallback(Handler.java:739)\r\n       at android.os.Handler.dispatchMessage(Handler.java:95)\r\n       at android.os.Looper.loop(Looper.java:148)\r\n       at android.app.ActivityThread.main(ActivityThread.java:5451)\r\n       at java.lang.reflect.Method.invoke(Method.java)\r\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)\r\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)\r\n```https://github.com/wordpress-mobile/WordPress-Android/issues/4875",
   "real": "org.wordpress.android.ui.accounts.SignInFragment$14.onResponse",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.SecurityException",
@@ -560,9 +605,11 @@
    "android.os.Looper.loop",
    "android.os.HandlerThread.run"
   ],
+  "year": "2016-07-05T08:56:18Z",
   "crashLog": "```\njava.lang.SecurityException: Not allowed to change Do Not Disturb state\n    at android.os.Parcel.readException(Parcel.java:1666)\n    at android.os.Parcel.readException(Parcel.java:1619)\n    at android.media.IAudioService$Stub$Proxy.setRingerModeExternal(IAudioService.java:962)\n    at android.media.AudioManager.setRingerMode(AudioManager.java:1022)\n    at de.tum.in.tumcampusapp.services.SilenceService.onHandleIntent(SilenceService.java:101)\n    at android.app.IntentService$ServiceHandler.handleMessage(IntentService.java:67)\n    at android.os.Handler.dispatchMessage(Handler.java:102)\n    at android.os.Looper.loop(Looper.java:154)\n    at android.os.HandlerThread.run(HandlerThread.java:61)\nForce finishing activity de.tum.in.tumcampus/de.tum.in.tumcampusapp.activities.StartupActivity\n```\nhttps://github.com/TCA-Team/TumCampusApp/issues/392",
   "real": "de.tum.in.tumcampusapp.services.SilenceService.onHandleIntent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -596,9 +643,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-10-23T16:20:07Z",
   "crashLog": "Can confirm with current git in emulator (API19). Exception from log:\n\n```\n10-23 12:16:14.341 1927-1927/org.kontalk.debug E/CursorWindow: Failed to read row 0, column 3 from a CursorWindow which has 4 rows, 3 columns.\n10-23 12:16:14.361 1927-1927/org.kontalk.debug E/Kontalk: error exporting keys\n                                                          java.lang.IllegalStateException: Couldn't read row 0, col 3 from CursorWindow.  Make sure the Cursor is initialized correctly before accessing data from it.\n                                                              at android.database.CursorWindow.nativeGetLong(Native Method)\n                                                              at android.database.CursorWindow.getLong(CursorWindow.java:507)\n                                                              at android.database.CursorWindow.getInt(CursorWindow.java:574)\n                                                              at android.database.AbstractWindowedCursor.getInt(AbstractWindowedCursor.java:69)\n                                                              at android.database.CursorWrapper.getInt(CursorWrapper.java:102)\n                                                              at org.kontalk.provider.Keyring.getTrustedKeys(Keyring.java:203)\n                                                              at org.kontalk.authenticator.Authenticator.exportDefaultPersonalKey(Authenticator.java:196)\n                                                              at org.kontalk.Kontalk.exportPersonalKey(Kontalk.java:244)\n                                                              at org.kontalk.ui.prefs.MaintenanceFragment.exportPersonalKey(MaintenanceFragment.java:331)\n                                                              at org.kontalk.ui.prefs.MaintenanceFragment.onActivityResult(MaintenanceFragment.java:359)\n                                                              at android.support.v4.app.FragmentActivity.onActivityResult(FragmentActivity.java:165)\n                                                              at android.app.Activity.dispatchActivityResult(Activity.java:5423)\n                                                              at android.app.ActivityThread.deliverResults(ActivityThread.java:3361)\n                                                              at android.app.ActivityThread.handleSendResult(ActivityThread.java:3408)\n                                                              at android.app.ActivityThread.access$1300(ActivityThread.java:135)\n                                                              at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1244)\n                                                              at android.os.Handler.dispatchMessage(Handler.java:102)\n                                                              at android.os.Looper.loop(Looper.java:136)\n                                                              at android.app.ActivityThread.main(ActivityThread.java:5017)\n                                                              at java.lang.reflect.Method.invokeNative(Native Method)\n                                                              at java.lang.reflect.Method.invoke(Method.java:515)\n                                                              at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)\n                                                              at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)\n                                                              at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/kontalk/androidclient/issues/848#issuecomment-255597670",
   "real": "org.kontalk.provider.Keyring.setTrustedKeys",
-  "category": "misuse"
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -629,9 +678,11 @@
    "android.app.Activity.performResume",
    "android.app.ActivityThread.performResumeActivity"
   ],
+  "year": "2016-03-11T08:07:15Z",
   "crashLog": ": android.database.sqlite.SQLiteException: no such table: layer_20160310165317326 (code 1)\n    at android.database.sqlite.SQLiteConnection.nativeExecuteForCursorWindow(Native Method)\n    at android.database.sqlite.SQLiteConnection.executeForCursorWindow(SQLiteConnection.java:849)\n    at android.database.sqlite.SQLiteSession.executeForCursorWindow(SQLiteSession.java:836)\n    at android.database.sqlite.SQLiteQuery.fillWindow(SQLiteQuery.java:62)\n    at android.database.sqlite.SQLiteCursor.fillWindow(SQLiteCursor.java:159)\n    at android.database.sqlite.SQLiteCursor.getCount(SQLiteCursor.java:148)\n    at android.database.AbstractCursor.moveToPosition(AbstractCursor.java:197)\n    at android.database.AbstractCursor.moveToFirst(AbstractCursor.java:237)\n    at com.nextgis.mobile.fragment.AttributesFragment.setAttributes(AttributesFragment.java:218)\n    at com.nextgis.mobile.fragment.AttributesFragment.onResume(AttributesFragment.java:151)\n    at android.support.v4.app.Fragment.performResume(Fragment.java:2008)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1119)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1259)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1241)\n    at android.support.v4.app.FragmentManagerImpl.dispatchResume(FragmentManager.java:2063)\n    at android.support.v4.app.FragmentController.dispatchResume(FragmentController.java:187)\n    at android.support.v4.app.FragmentActivity.onResumeFragments(FragmentActivity.java:462)\n    at android.support.v4.app.FragmentActivity.onPostResume(FragmentActivity.java:451)\n    at android.support.v7.app.AppCompatActivity.onPostResume(AppCompatActivity.java:141)\n    at android.app.Activity.performResume(Activity.java:5435)\n    at android.app.ActivityThread.performResumeActivity(ActivityThread.java:2989)\n    ... 10 more\n```\nhttps://github.com/nextgis/android_gisapp/issues/350",
   "real": "com.nextgis.mobile.fragment.AttributesFragment.setAttributes",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -653,9 +704,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2012-03-04T09:29:22Z",
   "crashLog": ": android.database.sqlite.SQLiteException: no such column: file.node_id: , while compiling: SELECT data.* FROM orgdata data JOIN(SELECT f.node_id FROM files f) file on file.node_id = data._id ORDER BY data.name ASC\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteProgram.native_compile(Native Method)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteProgram.compile(SQLiteProgram.java:110)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:59)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteQuery.<init>(SQLiteQuery.java:49)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:49)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1221)\nE/AndroidRuntime(11346):    at android.database.sqlite.SQLiteDatabase.rawQuery(SQLiteDatabase.java:1194)\nE/AndroidRuntime(11346):    at com.matburt.mobileorg.Parsing.OrgDatabase.getFileCursor(OrgDatabase.java:96)\nE/AndroidRuntime(11346):    at com.matburt.mobileorg.Gui.OutlineActivity.refreshDisplay(OutlineActivity.java:137)\nE/AndroidRuntime(11346):    at com.matburt.mobileorg.Gui.OutlineActivity.onCreate(OutlineActivity.java:102)\nE/AndroidRuntime(11346):    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1047)\nE/AndroidRuntime(11346):    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2466)\nE/AndroidRuntime(11346):    ... 11 more\nE/SemcCheckin(11346): Get crash dump level : java.io.FileNotFoundException: /data/semc-checkin/crashdump\nW/ActivityManager( 1202): Unable to start service Intent { act=com.sonyericsson.android.jcrashcatcher.action.BUGREPORT_AUTO cmp=com.sonyericsson.android.jcrashcatcher/.JCrashCatcherService (has extras) }: not found\n```\nhttps://github.com/matburt/mobileorg-android/issues/177",
   "real": "com.matburt.mobileorg.Parsing.OrgDatabase.getFileCursor",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.ClassCastException",
@@ -690,9 +743,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-06-05T11:36:06Z",
   "crashLog": ": java.lang.ClassCastException: org.wordpress.android.ui.accounts.NewUserPageFragment cannot be cast to android.app.Fragment\n       at android.app.Fragment.instantiate(Fragment.java:577)\n       at android.app.Fragment.instantiate(Fragment.java:552)\n       at android.app.Activity.onCreateView(Activity.java:4806)\n       at android.view.LayoutInflater.createViewFromTag(LayoutInflater.java:680)\n       at android.view.LayoutInflater.rInflate(LayoutInflater.java:746)\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:489)\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:396)\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:352)\n       at com.android.internal.policy.impl.PhoneWindow.setContentView(PhoneWindow.java:306)\n       at android.app.Activity.setContentView(Activity.java:1912)\n       at org.wordpress.android.ui.accounts.NewAccountActivity.onCreate(NewAccountActivity.java:15)\n       at android.app.Activity.performCreate(Activity.java:5163)\n       at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1094)\n       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2061)\n       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2122)\n       at android.app.ActivityThread.access$600(ActivityThread.java:140)\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1228)\n       at android.os.Handler.dispatchMessage(Handler.java:99)\n       at android.os.Looper.loop(Looper.java:137)\n       at android.app.ActivityThread.main(ActivityThread.java:4895)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:511)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:994)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:761)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1469",
   "real": "org.wordpress.android.ui.accounts.NewAccountActivity.onCreate",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.res.Resources$NotFoundException",
@@ -717,9 +772,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2015-10-10T18:33:11Z",
   "crashLog": ": android.content.res.Resources$NotFoundException: Resource is not a Drawable (color or path): TypedValue{t=0x2/d=0x7f0100df a=3}\n    at android.content.res.Resources.loadDrawable(Resources.java:1681)\n    at android.content.res.TypedArray.getDrawable(TypedArray.java:601)\n    at android.view.View.<init>(View.java:1951)\n    at android.widget.ImageView.<init>(ImageView.java:112)\n    at android.widget.ImageButton.<init>(ImageButton.java:85)\n    at android.support.v7.widget.Toolbar.ensureNavButtonView(Toolbar.java:1044)\n    at android.support.v7.widget.Toolbar.setNavigationOnClickListener(Toolbar.java:834)\n    at android.support.v7.internal.widget.ToolbarWidgetWrapper.<init>(ToolbarWidgetWrapper.java:190)\n    at android.support.v7.internal.widget.ToolbarWidgetWrapper.<init>(ToolbarWidgetWrapper.java:93)\n    at android.support.v7.internal.app.ToolbarActionBar.<init>(ToolbarActionBar.java:78)\n    at android.support.v7.app.AppCompatDelegateImplV7.setSupportActionBar(AppCompatDelegateImplV7.java:204)\n    at android.support.v7.app.AppCompatActivity.setSupportActionBar(AppCompatActivity.java:99)\n    at com.nextgis.mobile.activity.MainActivity.onCreate(MainActivity.java:117)\n    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1047)\n    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:1615)\n    ... 11 more\nhttps://github.com/nextgis/android_gisapp/issues/260",
   "real": "Resource XML",
-  "category": "res"
+  "category": "res",
+  "realCate": "C"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -736,17 +793,23 @@
    "android.app.Instrumentation.callActivityOnPause",
    "android.app.ActivityThread.performPauseActivity"
   ],
+  "year": "2016-01-06T15:35:28Z",
+  "buggyApi": "android.content.ContextWrapper.registerReceiver",
   "crashLog": ": java.lang.IllegalArgumentException: Receiver not registered: com.nextgis.mobile.activity.MainActivity$MessageReceiver@40ffcba0\n    at android.app.LoadedApk.forgetReceiverDispatcher(LoadedApk.java:675)\n    at android.app.ContextImpl.unregisterReceiver(ContextImpl.java:1314)\n    at android.content.ContextWrapper.unregisterReceiver(ContextWrapper.java:354)\n    at com.nextgis.mobile.activity.MainActivity.onPause(MainActivity.java:685)\n    at android.app.Activity.performPause(Activity.java:4649)\n    at android.app.Instrumentation.callActivityOnPause(Instrumentation.java:1307)\n    at android.app.ActivityThread.performPauseActivity(ActivityThread.java:3093)\n    ... 12 more\n```\nhttps://github.com/nextgis/android_gisapp/issues/315",
   "real": "com.nextgis.mobile.activity.MainActivity.onResume",
-  "buggyApi": "android.content.ContextWrapper.registerReceiver",
-  "category": "misuse"
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
   "msg": " no such column: title (code 1): , while compiling: SELECT geocode FROM cg_caches WHERE title = ?",
   "identifier": "cgeo.geocaching",
   "postURL": "https://github.com/cgeo/cgeo/issues/5591",
+  "reason": "It is enum that has been changed",
   "fileName": "cgeo.geocaching-5591",
+  "year": "2016-03-27T22:08:16Z",
+  "estimatedCate": "B",
+  "real": "cgeo.geocaching.storage.DataStore$PreparedStatement.<init>",
   "trace": [
    "android.database.sqlite.SQLiteConnection.nativePrepareStatement",
    "android.database.sqlite.SQLiteConnection.acquirePreparedStatement",
@@ -778,10 +841,8 @@
    "java.lang.reflect.Method.invoke"
   ],
   "crashLog": "I stumbled upon this Exception.\nThere is no **title** column in **cg_caches** table which causes a SQLiteException. \nThe Exception is only logged. \n\nI'm not really sure what the code should do. My guess is that it should look up the Geocode by **name** of the cache.\nIt is only used by GPXParser.findParentCache(), which tries to find the Geocache for a waypoint.\n##### Detailed steps causing the problem:\n- Run Unittest GPXParserTest\n##### Actual behavior after performing these steps:\n\n```\n03-27 23:54:24.541 20873-20899/cgeo.geocaching E/SQLiteLog: (1) no such column: title\n03-27 23:54:24.543 20873-20899/cgeo.geocaching E/cgeo: [Instr: android.support.test.runner.AndroidJUnitRunner] DataStore.getGeocodeForGuid\n                                                       android.database.sqlite.SQLiteException: no such column: title (code 1): , while compiling: SELECT geocode FROM cg_caches WHERE title = ?\n                                                           at android.database.sqlite.SQLiteConnection.nativePrepareStatement(Native Method)\n                                                           at android.database.sqlite.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:891)\n                                                           at android.database.sqlite.SQLiteConnection.prepare(SQLiteConnection.java:502)\n                                                           at android.database.sqlite.SQLiteSession.prepare(SQLiteSession.java:588)\n                                                           at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:58)\n                                                           at android.database.sqlite.SQLiteStatement.<init>(SQLiteStatement.java:31)\n                                                           at android.database.sqlite.SQLiteDatabase.compileStatement(SQLiteDatabase.java:994)\n                                                           at cgeo.geocaching.storage.DataStore$PreparedStatement.getStatement(DataStore.java:3131)\n                                                           at cgeo.geocaching.storage.DataStore$PreparedStatement.access$500(DataStore.java:3084)\n                                                           at cgeo.geocaching.storage.DataStore.getGeocodeForTitle(DataStore.java:1114)\n                                                           at cgeo.geocaching.files.GPXParser.findParentCache(GPXParser.java:1281)\n                                                           at cgeo.geocaching.files.GPXParser.access$1500(GPXParser.java:60)\n                                                           at cgeo.geocaching.files.GPXParser$4.addWaypointToCache(GPXParser.java:406)\n                                                           at cgeo.geocaching.files.GPXParser$4.end(GPXParser.java:380)\n                                                           at android.sax.RootElement$Handler.endElement(RootElement.java:188)\n                                                           at org.apache.harmony.xml.ExpatParser.endElement(ExpatParser.java:156)\n                                                           at org.apache.harmony.xml.ExpatParser.appendChars(Native Method)\n                                                           at org.apache.harmony.xml.ExpatParser.parseFragment(ExpatParser.java:497)\n                                                           at org.apache.harmony.xml.ExpatParser.parseDocument(ExpatParser.java:484)\n                                                           at org.apache.harmony.xml.ExpatReader.parse(ExpatReader.java:309)\n                                                           at org.apache.harmony.xml.ExpatReader.parse(ExpatReader.java:267)\n                                                           at android.util.Xml.parse(Xml.java:71)\n                                                           at cgeo.geocaching.files.GPXParser.parse(GPXParser.java:866)\n                                                           at cgeo.geocaching.files.GPXParserTest.readVersionedGPX(GPXParserTest.java:240)\n                                                           at cgeo.geocaching.files.GPXParserTest.readGPX10(GPXParserTest.java:227)\n                                                           at cgeo.geocaching.files.GPXParserTest.testGc31j2hWptsWithoutCache(GPXParserTest.java:138)\n                                                           at java.lang.reflect.Method.invoke(Native Method)\n                                                           at java.lang.reflect.Method.invoke(Method.java:372)\n```\n##### Expected behavior after performing these steps:\n\nThe sql statement GEOCODE_FROM_TITLE should be corrected.\n##### Version of c:geo used:\n\ndeveloper version master: dfbd95b\n##### Is the problem reproducible for you?\n\nYes\nhttps://github.com/cgeo/cgeo/issues/5591",
-  "estimatedCate": "B",
-  "real": "cgeo.geocaching.storage.DataStore$PreparedStatement.<init>",
-  "reason": "It is enum that has been changed",
-  "category": "misuse"
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -811,9 +872,12 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2017-02-28T15:38:39Z",
   "crashLog": " java.lang.IllegalArgumentException: View=DecorView@7cfc55b[] not attached to window manager\r\n       at android.view.WindowManagerGlobal.findViewLocked(WindowManagerGlobal.java:473)\r\n       at android.view.WindowManagerGlobal.removeView(WindowManagerGlobal.java:382)\r\n       at android.view.WindowManagerImpl.removeViewImmediate(WindowManagerImpl.java:124)\r\n       at android.app.Dialog.dismissDialog(Dialog.java:363)\r\n       at android.app.Dialog.dismiss(Dialog.java:346)\r\n       at org.wordpress.android.ui.WPLaunchActivity$1.onCompletion(WPLaunchActivity.java:35)\r\n       at org.wordpress.android.WordPress.endMigration(WordPress.java:361)\r\n       at org.wordpress.android.WordPress.migrateDrafts(WordPress.java:354)\r\n       at org.wordpress.android.WordPress.migrateSelfHostedSites(WordPress.java:343)\r\n       at org.wordpress.android.WordPress.onSiteChanged(WordPress.java:544)\r\n       at java.lang.reflect.Method.invoke(Method.java)\r\n       at org.greenrobot.eventbus.EventBus.invokeSubscriber(EventBus.java:485)\r\n       at org.greenrobot.eventbus.EventBus.invokeSubscriber(EventBus.java:479)\r\n       at org.greenrobot.eventbus.HandlerPoster.handleMessage(HandlerPoster.java:67)\r\n       at android.os.Handler.dispatchMessage(Handler.java:102)\r\n       at android.os.Looper.loop(Looper.java:154)\r\n       at android.app.ActivityThread.main(ActivityThread.java:6119)\r\n       at java.lang.reflect.Method.invoke(Method.java)\r\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)\r\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)\r\n```https://github.com/wordpress-mobile/WordPress-Android/issues/5297",
+  "estimatedCate": "A",
   "real": "org.wordpress.android.ui.WPLaunchActivity$1.onCompletion",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -838,10 +902,12 @@
    "android.os.Looper.loop",
    "android.os.HandlerThread.run"
   ],
+  "year": "2013-09-28T00:32:32Z",
   "crashLog": ": IntentService[GCMIntentService-DynamicSenderIds-1]\n        android.database.sqlite.SQLiteException: near \"=\": syntax error (code 1): , while compiling: UPDATE notes SET id=?,timestamp=?,type=?,note_id=?,raw_note_data=?,placeholder=? WHERE id=\n        at android.database.sqlite.SQLiteConnection.nativePrepareStatement(Native Method)\n        at android.database.sqlite.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:1097)\n        at android.database.sqlite.SQLiteConnection.prepare(SQLiteConnection.java:670)\n        at android.database.sqlite.SQLiteSession.prepare(SQLiteSession.java:588)\n        at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:58)\n        at android.database.sqlite.SQLiteStatement.<init>(SQLiteStatement.java:31)\n        at android.database.sqlite.SQLiteDatabase.updateWithOnConflict(SQLiteDatabase.java:1678)\n        at android.database.sqlite.SQLiteDatabase.update(SQLiteDatabase.java:1626)\n        at org.wordpress.android.WordPressDB.addNote(WordPressDB.java:1899)\n        at org.wordpress.android.GCMIntentService.onMessage(GCMIntentService.java:87)\n        at com.google.android.gcm.GCMBaseIntentService.onHandleIntent(GCMBaseIntentService.java:223)\n        at android.app.IntentService$ServiceHandler.handleMessage(IntentService.java:65)\n        at android.os.Handler.dispatchMessage(Handler.java:99)\n        at android.os.Looper.loop(Looper.java:137)\n        at android.os.HandlerThread.run(HandlerThread.java:61)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/134",
   "estimatedCate": "B",
   "real": "org.wordpress.android.WordPressDB.addNote",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.view.ViewRootImpl$CalledFromWrongThreadException",
@@ -861,9 +927,11 @@
    "fr.free.nrw.commons.contributions.ContributionsSyncAdapter.onPerformSync",
    "android.content.AbstractThreadedSyncAdapter$SyncThread.run"
   ],
+  "year": "2016-06-13T12:11:52Z",
   "crashLog": "I didn't know it was so short, I thought it took a while as it had to download all the thumbnails, but I think that was probably because the message stayed up so long.\n\nJust been testing trying to call clearSyncMessage() from the end of ContributionsSyncAdapter (after the line about the kitty) and got this error:\n\n```\n06-13 13:05:03.854 19157-22063/fr.free.nrw.commons E/ACRA: fr.free.nrw.commons fatal error : Only the original thread that created a view hierarchy can touch its views.\n                                                           android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.\n                                                               at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:8128)\n                                                               at android.view.ViewRootImpl.invalidateChildInParent(ViewRootImpl.java:1257)\n                                                               at android.view.ViewGroup.invalidateChild(ViewGroup.java:5428)\n                                                               at android.view.View.invalidateInternal(View.java:13927)\n                                                               at android.view.View.invalidate(View.java:13891)\n                                                               at android.view.View.setFlags(View.java:11776)\n                                                               at android.view.View.setVisibility(View.java:7988)\n                                                               at fr.free.nrw.commons.contributions.ContributionsListFragment.clearSyncMessage(ContributionsListFragment.java:162)\n                                                               at fr.free.nrw.commons.contributions.ContributionsSyncAdapter.onPerformSync(ContributionsSyncAdapter.java:129)\n                                                               at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:272)\n```\n\nidk yet how to get around this, some listener needs to be created in onCreateView I think\nhttps://github.com/commons-app/apps-android-commons/issues/1#issuecomment-225563649",
   "real": "fr.free.nrw.commons.contributions.ContributionsListFragment.clearSyncMessage",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteException",
@@ -871,6 +939,10 @@
   "identifier": "cgeo.geocaching",
   "postURL": "https://github.com/cgeo/cgeo/issues/1884",
   "fileName": "cgeo.geocaching-1884",
+  "year": "2012-07-15T09:50:30Z",
+  "buggyApi": "android.database.sqlite.SQLiteDatabase.execSQL",
+  "estimatedCate": "B",
+  "real": "cgeo.geocaching.cgData.access$100",
   "trace": [
    "android.database.sqlite.SQLiteCompiledSql.native_compile",
    "android.database.sqlite.SQLiteCompiledSql.<init>",
@@ -894,12 +966,10 @@
    "cgeo.geocaching.cgCache.searchByGeocode",
    "cgeo.geocaching.CacheDetailActivity$LoadCacheThread.run"
   ],
-  "crashLog": ": Thread-402\nE/AndroidRuntime( 3585): android.database.sqlite.SQLiteException: no such column: myvote: , while compiling: SELECT _id, updated, reason, detailed, detailedupdate, visiteddate, geocode, cacheid, guid, type, name, own, owner, owner_real, hidden, hint, size, difficulty, distance, direction, terrain, latlon, location, latitude, longitude, elevation, shortdesc, favourite_cnt, rating, votes, myvote, disabled, archived, members, found, favourite, inventorycoins, inventorytags, inventoryunknown, onWatchlist, personal_note, reliable_latlon, coordsChanged, finalDefined FROM cg_caches WHERE geocode in (\"GC3H58A\")\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteCompiledSql.native_compile(Native Method)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteCompiledSql.<init>(SQLiteCompiledSql.java:68)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.compileSql(SQLiteProgram.java:143)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.compileAndbindAllArgs(SQLiteProgram.java:361)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:127)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:94)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteQuery.<init>(SQLiteQuery.java:53)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:47)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1564)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.queryWithFactory(SQLiteDatabase.java:1449)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1405)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1523)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCachesFromGeocodes(cgData.java:1470)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCaches(cgData.java:1430)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCache(cgData.java:1394)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.saveCache(cgData.java:975)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgeoapplication.saveCache(cgeoapplication.java:480)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.connector.gc.GCParser.parseCache(GCParser.java:324)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.connector.gc.GCConnector.searchByGeocode(GCConnector.java:102)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgCache.searchByGeocode(cgCache.java:1543)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.CacheDetailActivity$LoadCacheThread.run(CacheDetailActivity.java:753)\nW/ActivityManager(  131):   Force finishing activity cgeo.geocaching/.CacheDetailActivity\n```\nhttps://github.com/cgeo/cgeo/issues/1884",
-  "estimatedCate": "B",
-  "real": "cgeo.geocaching.cgData.access$100",
-  "buggyApi": "android.database.sqlite.SQLiteDatabase.execSQL",
   "buggyCallback": "cgeo.geocaching.cgData$cgDbHelper.onUpgrade",
-  "category": "misuse"
+  "crashLog": ": Thread-402\nE/AndroidRuntime( 3585): android.database.sqlite.SQLiteException: no such column: myvote: , while compiling: SELECT _id, updated, reason, detailed, detailedupdate, visiteddate, geocode, cacheid, guid, type, name, own, owner, owner_real, hidden, hint, size, difficulty, distance, direction, terrain, latlon, location, latitude, longitude, elevation, shortdesc, favourite_cnt, rating, votes, myvote, disabled, archived, members, found, favourite, inventorycoins, inventorytags, inventoryunknown, onWatchlist, personal_note, reliable_latlon, coordsChanged, finalDefined FROM cg_caches WHERE geocode in (\"GC3H58A\")\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteCompiledSql.native_compile(Native Method)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteCompiledSql.<init>(SQLiteCompiledSql.java:68)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.compileSql(SQLiteProgram.java:143)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.compileAndbindAllArgs(SQLiteProgram.java:361)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:127)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:94)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteQuery.<init>(SQLiteQuery.java:53)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:47)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1564)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.queryWithFactory(SQLiteDatabase.java:1449)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1405)\nE/AndroidRuntime( 3585):    at android.database.sqlite.SQLiteDatabase.query(SQLiteDatabase.java:1523)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCachesFromGeocodes(cgData.java:1470)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCaches(cgData.java:1430)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.loadCache(cgData.java:1394)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgData.saveCache(cgData.java:975)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgeoapplication.saveCache(cgeoapplication.java:480)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.connector.gc.GCParser.parseCache(GCParser.java:324)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.connector.gc.GCConnector.searchByGeocode(GCConnector.java:102)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.cgCache.searchByGeocode(cgCache.java:1543)\nE/AndroidRuntime( 3585):    at cgeo.geocaching.CacheDetailActivity$LoadCacheThread.run(CacheDetailActivity.java:753)\nW/ActivityManager(  131):   Force finishing activity cgeo.geocaching/.CacheDetailActivity\n```\nhttps://github.com/cgeo/cgeo/issues/1884",
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "android.util.AndroidRuntimeException",
@@ -916,9 +986,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2011-10-04T17:57:45Z",
   "crashLog": ": android.util.AndroidRuntimeException: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?\n    at android.app.ContextImpl.startActivity(ContextImpl.java:617)\n    at android.content.ContextWrapper.startActivity(ContextWrapper.java:258)\n    at cgeo.geocaching.Settings.getLogin(Settings.java:197)\n    at cgeo.geocaching.cgeo.init(cgeo.java:443)\n    at cgeo.geocaching.cgeo.onCreate(cgeo.java:194)\n    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1047)\n    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2627)\n    ... 11 more\n```\n\nThe problem occurs only with a fresh install:\n\n``` java\nif (!isInitialized() && (preUsername == null || prePassword == null))\n```\n\n(Settings.java:194)\nhttps://github.com/cgeo/cgeo/issues/600",
   "real": "cgeo.geocaching.Settings.getLogin",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -934,9 +1006,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2015-08-09T12:01:58Z",
   "crashLog": ": java.lang.IllegalStateException: This Activity already has an action bar supplied by the window decor. Do not request Window.FEATURE_ACTION_BAR and set windowActionBar to false in your theme to use a Toolbar instead.\nE/AndroidRuntime(17282):    at android.support.v7.app.ActionBarActivityDelegateBase.setSupportActionBar(ActionBarActivityDelegateBase.java:165)\nE/AndroidRuntime(17282):    at android.support.v7.app.ActionBarActivity.setSupportActionBar(ActionBarActivity.java:92)\nE/AndroidRuntime(17282):    at de.danoeh.antennapod.activity.MainActivity.onCreate(MainActivity.java:107)\nE/AndroidRuntime(17282):    at android.app.Activity.performCreate(Activity.java:6084)\nE/AndroidRuntime(17282):    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1106)\nE/AndroidRuntime(17282):    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2307)\nE/AndroidRuntime(17282):    ... 10 more\nD/AppTracker(17282): AppTracker onEvent: crash\nD/DropBoxManagerService( 1090): file :: /data/system/dropbox/data_app_crash@1439121274832.txt\nW/ActivityManager( 1090):   Force finishing activity 1 de.danoeh.antennapod/.activity.MainActivity\nI/WindowManager( 1090): Screenshot max retries 4 of Token{379edeec ActivityRecord{5543d9f u0 de.danoeh.antennapod/.activity.MainActivity t825 f}} appWin=Window{22841f84 u0 Starting de.danoeh.antennapod} drawState=4\nD/OpenGLRenderer( 1090): Use EGL_SWAP_BEHAVIOR_PRESERVED: true\nD/Atlas   ( 1090): Validating map...\nI/OpenGLRenderer( 1090): Initialized EGL, version 1.4\nD/OpenGLRenderer( 1090): Enabling debug mode 0\nD/StatusBar.MSimNetworkController( 4212): refreshViews phoneId =0mMSimDataConnected =false\nD/StatusBar.MSimNetworkController( 4212): refreshViews mMSimDataActivity =0\nD/StatusBar.MSimNetworkController( 4212): refreshViews: Data not connected!! Set no data type icon / Roaming for phoneId: 0\nW/ResourceType( 4212): No package identifier when getting value for resource number 0x00000000\nW/PackageManager( 4212): Failure retrieving resources for de.danoeh.antennapod: Resource ID #0x0\nW/ActivityManager( 1090): Activity pause timeout for ActivityRecord{5543d9f u0 de.danoeh.antennapod/.activity.MainActivity t825 f}\nD/AppTracker( 4972): AppTracker onEvent: start\nD/AbstractTracker( 4972): Insert Complete\nI/Timeline( 4972): Timeline: Activity_idle id: android.os.BinderProxy@1365acc3 time:7481830\nI/ActivityManager( 1090): Killing 12293:com.android.chrome/u0a34 (adj 15): empty #17\nV/ActivityManager( 1090): killProcessGroupAsync took 0 ms for PID 12293 on thread 16\nW/ActivityManager( 1090): getTasks: caller 10108 does not hold GET_TASKS; limiting output\nI/Timeline( 1090): Timeline: Activity_windows_visible id: ActivityRecord{3dab9f86 u0 com.android.launcher3/.Launcher t801} time:7482120\nW/OpenGLRenderer( 4972): Incorrectly called buildLayer on View: ShortcutAndWidgetContainer, destroying layer...\nD/KeyguardUpdateMonitor( 4212): received broadcast android.intent.action.BATTERY_CHANGED\nD/KeyguardUpdateMonitor( 4212): handleBatteryUpdate\nD/StatusBar.MSimNetworkController( 4212): getPhoneId phoneId: 0\nD/StatusBar.MSimNetworkController( 4212): getPhoneId phoneId: 0\nD/StatusBar.MSimNetworkController( 4212): updateIconSet, phoneId = 0\nD/StatusBar.MSimNetworkController( 4212): updateIconSet, voice network type is: 13/LTE, data network type is: 13/LTE\n```\nhttps://github.com/AntennaPod/AntennaPod/issues/1073",
   "real": "de.danoeh.antennapod.activity.MainActivity.onCreate",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -959,9 +1033,11 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2016-01-20T21:50:26Z",
   "crashLog": ": main\n                                                                     Process: org.y20k.transistor, PID: 31054\n                                                                     java.lang.IllegalStateException: Fragment MainActivityFragment{e7db358} not attached to Activity\n                                                                         at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:925)\n                                                                         at org.y20k.transistor.MainActivityFragment.selectFromImagePicker(MainActivityFragment.java:482)\n                                                                         at org.y20k.transistor.MainActivityFragment.access$500(MainActivityFragment.java:58)\n                                                                         at org.y20k.transistor.MainActivityFragment$6.onReceive(MainActivityFragment.java:415)\n                                                                         at android.support.v4.content.LocalBroadcastManager.executePendingBroadcasts(LocalBroadcastManager.java:297)\n                                                                         at android.support.v4.content.LocalBroadcastManager.access$000(LocalBroadcastManager.java:46)\n                                                                         at android.support.v4.content.LocalBroadcastManager$1.handleMessage(LocalBroadcastManager.java:116)\n                                                                         at android.os.Handler.dispatchMessage(Handler.java:102)\n                                                                         at android.os.Looper.loop(Looper.java:148)\n                                                                         at android.app.ActivityThread.main(ActivityThread.java:5417)\n                                                                         at java.lang.reflect.Method.invoke(Native Method)\n                                                                         at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)\n                                                                         at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)\n```\nhttps://github.com/y20k/transistor/issues/21",
   "real": "org.y20k.transistor.MainActivityFragment.onDestroy",
-  "category": "missing"
+  "category": "missing",
+  "realCate": "B"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -990,9 +1066,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-08-30T10:41:46Z",
   "crashLog": "Similar to #4245, only for trackables.\n\n```\njava.lang.IllegalStateException: Activity has been destroyed\n   at android.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1280)\n   at android.app.BackStackRecord.commitInternal(BackStackRecord.java:541)\n   at android.app.BackStackRecord.commit(BackStackRecord.java:525)\n   at android.nfc.NfcFragment.attach(NfcFragment.java:40)\n   at android.nfc.NfcActivityManager.getOrCreateState(NfcActivityManager.java:153)\n   at android.nfc.NfcActivityManager.setNdefPushMessageCallback(NfcActivityManager.java:114)\n   at android.nfc.NfcAdapter.setNdefPushMessageCallback(NfcAdapter.java:744)\n   at cgeo.geocaching.activity.AbstractActivity.initializeICSAndroidBeam(AbstractActivity.java:230)\n   at cgeo.geocaching.activity.AbstractActivity.initializeAndroidBeam(AbstractActivity.java:220)\n   at cgeo.geocaching.TrackableActivity.access$700(TrackableActivity.java:59)\n   at cgeo.geocaching.TrackableActivity$1.handleMessage(TrackableActivity.java:120)\n   at android.os.Handler.dispatchMessage(Handler.java:99)\n   at android.os.Looper.loop(Looper.java:137)\n   at android.app.ActivityThread.main(ActivityThread.java:4511)\n   at java.lang.reflect.Method.invokeNative(Native Method)\n   at java.lang.reflect.Method.invoke(Method.java:511)\n   at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:976)\n   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:743)\n   at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/cgeo/cgeo/issues/4275",
   "real": "cgeo.geocaching.activity.AbstractActivity.initializeICSAndroidBeam",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1022,9 +1100,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-07-07T08:36:17Z",
   "crashLog": "```\njava.lang.IllegalStateException: Activity has been destroyed\n       at android.support.v4.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1376)\n       at android.support.v4.app.BackStackRecord.commitInternal(BackStackRecord.java:595)\n       at android.support.v4.app.BackStackRecord.commitAllowingStateLoss(BackStackRecord.java:578)\n       at org.wordpress.android.ui.posts.PostsActivity.onPostSelected(PostsActivity.java:372)\n       at org.wordpress.android.ui.posts.PostsListFragment.showPost(PostsListFragment.java:258)\n       at org.wordpress.android.ui.posts.PostsListFragment.access$600(PostsListFragment.java:41)\n       at org.wordpress.android.ui.posts.PostsListFragment$5.onPostsLoaded(PostsListFragment.java:150)\n       at org.wordpress.android.ui.posts.adapters.PostsListAdapter$LoadPostsTask.onPostExecute(PostsListAdapter.java:217)\n       at org.wordpress.android.ui.posts.adapters.PostsListAdapter$LoadPostsTask.onPostExecute(PostsListAdapter.java:197)\n       at android.os.AsyncTask.finish(AsyncTask.java:631)\n       at android.os.AsyncTask.access$600(AsyncTask.java:177)\n       at android.os.AsyncTask$InternalHandler.handleMessage(AsyncTask.java:644)\n       at android.os.Handler.dispatchMessage(Handler.java:99)\n       at android.os.Looper.loop(Looper.java:137)\n       at android.app.ActivityThread.main(ActivityThread.java:4745)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:511)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:788)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:555)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1588",
   "real": "org.wordpress.android.ui.posts.PostsActivity.onPostSelected",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.res.Resources$NotFoundException",
@@ -1057,9 +1137,12 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-09-10T09:06:43Z",
   "crashLog": ": android.content.res.Resources$NotFoundException: String resource ID #0x0\n       at android.content.res.Resources.getText(Resources.java:242)\n       at android.content.Context.getText(Context.java:283)\n       at android.app.AlertDialog$Builder.setTitle(AlertDialog.java:397)\n       at org.wordpress.android.widgets.AuthErrorDialogFragment.onCreateDialog(AuthErrorDialogFragment.java:55)\n       at android.app.DialogFragment.getLayoutInflater(DialogFragment.java:398)\n       at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:829)\n       at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1035)\n       at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1017)\n       at android.app.FragmentManagerImpl.dispatchActivityCreated(FragmentManager.java:1802)\n       at android.app.Activity.performCreate(Activity.java:5209)\n       at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1094)\n       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2064)\n       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2125)\n       at android.app.ActivityThread.access$600(ActivityThread.java:140)\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1227)\n       at android.os.Handler.dispatchMessage(Handler.java:99)\n       at android.os.Looper.loop(Looper.java:137)\n       at android.app.ActivityThread.main(ActivityThread.java:4898)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:511)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1008)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:775)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1843",
+  "estimatedCate": "A",
   "real": "org.wordpress.android.widgets.AuthErrorDialogFragment.onCreateDialog",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.os.BadParcelableException",
@@ -1096,9 +1179,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2016-10-24T07:46:32Z",
   "crashLog": ": android.os.BadParcelableException: ClassNotFoundException when unmarshalling: android.support.v7.widget.Toolbar$SavedState\n    at android.os.Parcel.readParcelableCreator(Parcel.java:2154)\n    at android.os.Parcel.readParcelable(Parcel.java:2104)\n    at android.os.Parcel.readValue(Parcel.java:2020)\n    at android.os.Parcel.readSparseArrayInternal(Parcel.java:2382)\n    at android.os.Parcel.readSparseArray(Parcel.java:1742)\n    at android.os.Parcel.readValue(Parcel.java:2077)\n    at android.os.Parcel.readArrayMapInternal(Parcel.java:2321)\n    at android.os.Bundle.unparcel(Bundle.java:249)\n    at android.os.Bundle.getSparseParcelableArray(Bundle.java:1273)\n    at com.android.internal.policy.impl.PhoneWindow.restoreHierarchyState(PhoneWindow.java:1818)\n    at android.app.Dialog.onRestoreInstanceState(Dialog.java:439)\n    at android.preference.DialogPreference.showDialog(DialogPreference.java:302)\n    at com.nextgis.mobile.dialog.SelectMapPathDialogPreference.showDialog(SelectMapPathDialogPreference.java:136)\n    at android.preference.DialogPreference.onRestoreInstanceState(DialogPreference.java:441)\n    at com.nextgis.mobile.dialog.SelectMapPathDialogPreference.onRestoreInstanceState(SelectMapPathDialogPreference.java:117)\n    at android.preference.Preference.dispatchRestoreInstanceState(Preference.java:1806)\n    at android.preference.PreferenceGroup.dispatchRestoreInstanceState(PreferenceGroup.java:337)\n    at android.preference.Preference.restoreHierarchyState(Preference.java:1788)\n    at android.preference.PreferenceFragment.onActivityCreated(PreferenceFragment.java:194)\n    at android.app.Fragment.performActivityCreated(Fragment.java:1708)\n    at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:908)\n    at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1062)\n    at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1044)\n    at android.app.FragmentManagerImpl.dispatchActivityCreated(FragmentManager.java:1853)\n    at android.app.Activity.performCreate(Activity.java:5346)\n    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1088)\n    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2331)\n    ... 12 more\n```\nhttps://github.com/nextgis/android_gisapp/issues/532",
   "real": "com.nextgis.mobile.dialog.SelectMapPathDialogPreference.showDialog",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.res.Resources$NotFoundException",
@@ -1120,9 +1205,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2012-06-01T14:25:48Z",
   "crashLog": "D/cgeo    ( 6583): Loading GC27E66 Out and about around Andover, The river anton (1) from DB\nD/cgeo    ( 6583): cgData.loadCachesFromGeocodes([GC19HVJ]) from DB\nD/cgeo    ( 6583): Loading GC19HVJ A Road Anarchy A303 (W'bound) - Boredom Threshold (1) from DB\nW/ResourceType( 6583): No package identifier when getting value for resource number 0x00000000\nE/cgeo    ( 6583): GpxExport.ExportTask export\nE/cgeo    ( 6583): android.content.res.Resources$NotFoundException: String resource ID #0x0\nE/cgeo    ( 6583):  at android.content.res.Resources.getText(Resources.java:201)\nE/cgeo    ( 6583):  at android.content.res.Resources.getString(Resources.java:254)\nE/cgeo    ( 6583):  at cgeo.geocaching.enumerations.CacheAttribute.getL10n(CacheAttribute.java:100)\nE/cgeo    ( 6583):  at cgeo.geocaching.export.GpxExport$ExportTask.writeAttributes(GpxExport.java:312)\nE/cgeo    ( 6583):  at cgeo.geocaching.export.GpxExport$ExportTask.doInBackground$5f8445a4(GpxExport.java:152)\nE/cgeo    ( 6583):  at cgeo.geocaching.export.GpxExport$ExportTask.doInBackground(GpxExport.java:45)\nE/cgeo    ( 6583):  at android.os.AsyncTask$2.call(AsyncTask.java:185)\nE/cgeo    ( 6583):  at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:306)\nE/cgeo    ( 6583):  at java.util.concurrent.FutureTask.run(FutureTask.java:138)\nE/cgeo    ( 6583):  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1088)\nE/cgeo    ( 6583):  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:581)\nE/cgeo    ( 6583):  at java.lang.Thread.run(Thread.java:1019)\nhttps://github.com/cgeo/cgeo/issues/1699#issuecomment-6061547",
   "real": "Resource XML",
-  "category": "res"
+  "category": "res",
+  "realCate": "C"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1144,9 +1231,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-04-09T19:31:44Z",
   "crashLog": ": main\nE/AndroidRuntime(11775): java.lang.IllegalStateException: Cannot add header view to list -- setAdapter has already been called.\nE/AndroidRuntime(11775):    at android.widget.ListView.addHeaderView(ListView.java:264)\nE/AndroidRuntime(11775):    at android.widget.ListView.addHeaderView(ListView.java:293)\nE/AndroidRuntime(11775):    at org.kiwix.kiwixmobile.utils.HTMLUtils$HTMLinterface$1.run(HTMLUtils.java:68)\nE/AndroidRuntime(11775):    at android.os.Handler.handleCallback(Handler.java:725)\nE/AndroidRuntime(11775):    at android.os.Handler.dispatchMessage(Handler.java:92)\nE/AndroidRuntime(11775):    at android.os.Looper.loop(Looper.java:175)\nE/AndroidRuntime(11775):    at android.app.ActivityThread.main(ActivityThread.java:5279)\nE/AndroidRuntime(11775):    at java.lang.reflect.Method.invokeNative(Native Method)\nE/AndroidRuntime(11775):    at java.lang.reflect.Method.invoke(Method.java:511)\nE/AndroidRuntime(11775):    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1102)\nE/AndroidRuntime(11775):    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:869)\nE/AndroidRuntime(11775):    at dalvik.system.NativeStart.main(Native Method)\nE/SurfaceFlinger(  469): #### captureScreenImplLocked\nhttps://github.com/kiwix/kiwix-xulrunner/issues/19",
   "real": "org.kiwix.kiwixmobile.utils.HTMLUtils$HTMLinterface$1.run",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -1178,9 +1267,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-08-27T14:56:28Z",
   "crashLog": "With 2014.08.27, from Play Store:\n\n```\nandroid.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.VIEW dat=http://www.geocaching.com }\n   at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1650)\n   at android.app.Instrumentation.execStartActivity(Instrumentation.java:1424)\n   at android.app.Activity.startActivityForResult(Activity.java:3390)\n   at android.app.Activity.startActivityForResult(Activity.java:3351)\n   at android.app.Activity.startActivity(Activity.java:3587)\n   at android.app.Activity.startActivity(Activity.java:3555)\n   at cgeo.geocaching.settings.SettingsActivity$1.onPreferenceClick(SettingsActivity.java:187)\n   at android.preference.Preference.performClick(Preference.java:956)\n   at android.preference.PreferenceScreen.onItemClick(PreferenceScreen.java:215)\n   at android.widget.AdapterView.performItemClick(AdapterView.java:298)\n   at android.widget.AbsListView.performItemClick(AbsListView.java:1100)\n   at android.widget.AbsListView$PerformClick.run(AbsListView.java:2788)\n   at android.widget.AbsListView$1.run(AbsListView.java:3463)\n   at android.os.Handler.handleCallback(Handler.java:730)\n   at android.os.Handler.dispatchMessage(Handler.java:92)\n   at android.os.Looper.loop(Looper.java:137)\n   at android.app.ActivityThread.main(ActivityThread.java:5235)\n   at java.lang.reflect.Method.invokeNative(Native Method)\n   at java.lang.reflect.Method.invoke(Method.java:525)\n   at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:742)\n   at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:558)\n   at dalvik.system.NativeStart.main(Native Method)\n```\nhttps://github.com/cgeo/cgeo/issues/4236",
   "real": "cgeo.geocaching.settings.SettingsActivity$1.onPreferenceClick",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1188,6 +1279,10 @@
   "identifier": "cgeo.geocaching",
   "postURL": "https://github.com/cgeo/cgeo/issues/4450",
   "fileName": "cgeo.geocaching-4450",
+  "year": "2014-10-31T11:52:20Z",
+  "buggyApi": "android.database.sqlite.SQLiteStatement.close",
+  "estimatedCate": "B",
+  "real": "cgeo.geocaching.DataStore$PreparedStatements.clearPreparedStatements",
   "trace": [
    "android.database.sqlite.SQLiteClosable.acquireReference",
    "android.database.sqlite.SQLiteStatements.simpleQueryForLong",
@@ -1196,10 +1291,8 @@
    "cgeo.geocaching.MainActivity$CountBubbleUpdateThread.run"
   ],
   "crashLog": "2014.10.31-NB:\n- Start c:geo\n- Enter Settings - System\n- Perform Backup \n- Leave settings\n- Crash when returning to home screen\n\n```\n12:50:22.842 Debug cgeo 22499  GpsStatusProvider: stopping the GPS status listener\n12:50:25.261 Debug cgeo 22499  LocationProvider: stopping location requests\n12:50:27.007 Info cgeo 22499  Database was copied to /storage/emulated/0/.cgeo/cgeo.sqlite\n12:50:31.161 Info cgeo 22499  Requesting settings backup with settings manager\n12:50:31.267 Debug cgeo 22499  LocationProvider: requesting most precise locations\n12:50:31.267 Error cgeo 22499  UncaughtException\n12:50:31.267 Error cgeo 22499  java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteProgram: SELECT count(_id) FROM cg_caches WHERE reason >= 1\n12:50:31.267 Error cgeo 22499   at android.database.sqlite.SQLiteClosable.acquireReference(SQLiteClosable.java:55)\n12:50:31.268 Error cgeo 22499   at android.database.sqlite.SQLiteStatement.simpleQueryForLong(SQLiteStatement.java:105)\n12:50:31.268 Error cgeo 22499   at cgeo.geocaching.DataStore$PreparedStatements.simpleQueryForLong(DataStore.java:2915)\n12:50:31.268 Error cgeo 22499   at cgeo.geocaching.DataStore.getAllCachesCount(DataStore.java:2609)\n12:50:31.268 Error cgeo 22499   at cgeo.geocaching.MainActivity$CountBubbleUpdateThread.run(MainActivity.java:684)\n12:50:31.269 Debug cgeo 22499  GpsStatusProvider: starting the GPS status listener\n12:50:31.485 Debug cgeo 22499  GpsStatusProvider: stopping the GPS status listener\n12:50:33.901 Debug cgeo 22499  LocationProvider: stopping location requests\n```\nhttps://github.com/cgeo/cgeo/issues/4450",
-  "estimatedCate": "B",
-  "real": "cgeo.geocaching.DataStore$PreparedStatements.clearPreparedStatements",
-  "buggyApi": "android.database.sqlite.SQLiteStatement.close",
-  "category": "misuse"
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "android.database.CursorIndexOutOfBoundsException",
@@ -1217,9 +1310,11 @@
    "android.os.Looper.loop",
    "android.os.HandlerThread.run"
   ],
+  "year": "2015-10-22T21:37:59Z",
   "crashLog": "```\nandroid.database.CursorIndexOutOfBoundsException: Index -1 requested, with a size of 1\n    at android.database.AbstractCursor.checkPosition(AbstractCursor.java:426)\n    at android.database.AbstractWindowedCursor.checkPosition(AbstractWindowedCursor.java:136)\n    at android.database.AbstractWindowedCursor.getString(AbstractWindowedCursor.java:50)\n    at de.tum.in.tumcampus.services.SilenceService.onHandleIntent(SilenceService.java:110)\n    at android.app.IntentService$ServiceHandler.handleMessage(IntentService.java:65)\n    at android.os.Handler.dispatchMessage(Handler.java:102)\n    at android.os.Looper.loop(Looper.java:145)\n    at android.os.HandlerThread.run(HandlerThread.java:61)\n```\n\nMy guess is, that this happens when there is no \"next\" lecture.\nhttps://github.com/TCA-Team/TumCampusApp/issues/333#issuecomment-150363580",
   "real": "de.tum.in.tumcampus.services.SilenceService.onHandleIntent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteConstraintException",
@@ -1240,9 +1335,12 @@
    "org.kontalk.provider.UsersProvider$DatabaseHelper.getReadableDatabase",
    "org.kontalk.provider.UsersProvider.query"
   ],
+  "year": "2016-12-06T11:04:29Z",
   "crashLog": "Reported to Crashlytics.\r\n\r\n```\r\nandroid.database.sqlite.SQLiteConstraintException: NOT NULL constraint failed: keys_backup.fingerprint (code 1299)\r\n       at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(SQLiteConnection.java)\r\n       at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:732)\r\n       at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)\r\n       at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)\r\n       at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:1676)\r\n       at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:1605)\r\n       at org.kontalk.provider.UsersProvider$DatabaseHelper.onUpgrade(UsersProvider.java:211)\r\n       at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:256)\r\n       at android.database.sqlite.SQLiteOpenHelper.getReadableDatabase(SQLiteOpenHelper.java:187)\r\n       at org.kontalk.provider.UsersProvider$DatabaseHelper.getReadableDatabase(UsersProvider.java:244)\r\n       at org.kontalk.provider.UsersProvider.query(UsersProvider.java:417)\r\n```https://github.com/kontalk/androidclient/issues/883",
+  "estimatedCate": "A",
   "real": "org.kontalk.provider.UsersProvider$DatabaseHelper.onUpgrade",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.ClassNotFoundException",
@@ -1282,9 +1380,11 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2017-03-20T08:46:24Z",
   "crashLog": " java.lang.ClassNotFoundException: Didn't find class \"org.wordpress.android.widgets.WPEditText\" on path: DexPathList[[zip file \"/data/app/org.wordpress.android-1/base.apk\"],nativeLibraryDirectories=[/data/app/org.wordpress.android-1/lib/arm64, /system/lib64, /vendor/lib64]]\r\n       at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:56)\r\n       at java.lang.ClassLoader.loadClass(ClassLoader.java:380)\r\n       at java.lang.ClassLoader.loadClass(ClassLoader.java:312)\r\n       at android.view.LayoutInflater.createView(LayoutInflater.java:609)\r\n       at android.view.LayoutInflater.createViewFromTag(LayoutInflater.java:787)\r\n       at android.view.LayoutInflater.createViewFromTag(LayoutInflater.java:727)\r\n       at android.view.LayoutInflater.rInflate(LayoutInflater.java:858)\r\n       at android.view.LayoutInflater.rInflateChildren(LayoutInflater.java:821)\r\n       at android.view.LayoutInflater.rInflate(LayoutInflater.java:861)\r\n       at android.view.LayoutInflater.rInflateChildren(LayoutInflater.java:821)\r\n       at android.view.LayoutInflater.rInflate(LayoutInflater.java:861)\r\n       at android.view.LayoutInflater.rInflateChildren(LayoutInflater.java:821)\r\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:518)\r\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:426)\r\n       at android.view.LayoutInflater.inflate(LayoutInflater.java:377)\r\n       at android.support.v7.app.AppCompatDelegateImplV9.setContentView(AppCompatDelegateImplV9.java:288)\r\n       at android.support.v7.app.AppCompatActivity.setContentView(AppCompatActivity.java:140)\r\n       at org.wordpress.android.ui.comments.EditCommentActivity.onCreate(EditCommentActivity.java:64)\r\n       at android.app.Activity.performCreate(Activity.java:6682)\r\n       at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1118)\r\n       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2618)\r\n       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2726)\r\n       at android.app.ActivityThread.-wrap12(ActivityThread.java)\r\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1477)\r\n       at android.os.Handler.dispatchMessage(Handler.java:102)\r\n       at android.os.Looper.loop(Looper.java:154)\r\n       at android.app.ActivityThread.main(ActivityThread.java:6119)\r\n       at java.lang.reflect.Method.invoke(Method.java)\r\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)\r\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)\r\n```https://github.com/wordpress-mobile/WordPress-Android/issues/5449",
   "real": "Resource XML",
-  "category": "res"
+  "category": "res",
+  "realCate": "C"
  },
  {
   "exception": "java.lang.SecurityException",
@@ -1311,9 +1411,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2017-02-16T09:57:44Z",
   "crashLog": "It might happen when messing around with permissions, but it should be handled gracefully:\r\n\r\n```\r\njava.lang.SecurityException: Permission Denial: reading com.android.providers.media.MediaDocumentsProvider uri content://com.android.providers.media.documents/document/image%3A554 from pid=5788, uid=10183 requires android.permission.MANAGE_DOCUMENTS, or grantUriPermission()\r\n       at android.os.Parcel.readException(Parcel.java:1546)\r\n       at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:185)\r\n       at android.database.DatabaseUtils.readExceptionWithFileNotFoundExceptionFromParcel(DatabaseUtils.java:148)\r\n       at android.content.ContentProviderProxy.openTypedAssetFile(ContentProviderNative.java:691)\r\n       at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:1131)\r\n       at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:970)\r\n       at android.content.ContentResolver.openInputStream(ContentResolver.java:695)\r\n       at org.kontalk.util.MediaStorage.cacheThumbnail(MediaStorage.java:150)\r\n       at org.kontalk.util.MediaStorage.cacheThumbnail(MediaStorage.java:144)\r\n       at org.kontalk.ui.view.ImageContentView$GenerateThumbnailTask.doInBackground(ImageContentView.java:214)\r\n       at org.kontalk.ui.view.ImageContentView$GenerateThumbnailTask.doInBackground(ImageContentView.java:196)\r\n       at android.os.AsyncTask$2.call(AsyncTask.java:292)\r\n       at java.util.concurrent.FutureTask.run(FutureTask.java:237)\r\n       at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:231)\r\n       at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1112)\r\n       at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:587)\r\n       at java.lang.Thread.run(Thread.java:818)\r\n```https://github.com/kontalk/androidclient/issues/958",
   "real": "org.kontalk.ui.view.ImageContentView$GenerateThumbnailTask.doInBackground",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.view.ViewRootImpl$CalledFromWrongThreadException",
@@ -1338,9 +1440,12 @@
    "org.kontalk.ui.MessagingNotification$1.run",
    "java.lang.Thread.run"
   ],
+  "year": "2016-09-04T09:50:49Z",
   "crashLog": "```\nandroid.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.\n       at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:6814)\n       at android.view.ViewRootImpl.invalidateChildInParent(ViewRootImpl.java:978)\n       at android.view.ViewGroup.invalidateChild(ViewGroup.java:5100)\n       at android.view.View.invalidateInternal(View.java:12826)\n       at android.view.View.invalidate(View.java:12790)\n       at android.view.View.invalidate(View.java:12774)\n       at android.widget.ImageView.invalidateDrawable(ImageView.java:248)\n       at android.graphics.drawable.Drawable.invalidateSelf(Drawable.java:387)\n       at android.graphics.drawable.ShapeDrawable.updateShape(ShapeDrawable.java:476)\n       at android.graphics.drawable.ShapeDrawable.onBoundsChange(ShapeDrawable.java:333)\n       at android.graphics.drawable.Drawable.setBounds(Drawable.java:170)\n       at org.kontalk.util.MessageUtils.drawableToBitmap(MessageUtils.java:882)\n       at org.kontalk.ui.MessagingNotification.updateMessagesNotification(MessagingNotification.java:368)\n       at org.kontalk.ui.MessagingNotification$1.run(MessagingNotification.java:146)\n       at java.lang.Thread.run(Thread.java:833)\n```\nhttps://github.com/kontalk/androidclient/issues/795",
+  "estimatedCate": "A",
   "real": "org.kontalk.ui.MessagingNotification.updateMessagesNotification",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.view.ViewRoot$CalledFromWrongThreadException",
@@ -1372,9 +1477,11 @@
    "cgeo.geocaching.CachePopupFragment$StoreCacheClickListener$2.call",
    "rx.internal.schedulers.ScheduledAction.run"
   ],
+  "year": "2014-12-11T21:50:54Z",
   "crashLog": ": android.view.ViewRoot$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.\n   at android.view.ViewRoot.checkThread(ViewRoot.java:3041)\n   at android.view.ViewRoot.invalidateChild(ViewRoot.java:647)\n   at android.view.ViewRoot.invalidateChildInParent(ViewRoot.java:673)\n   at android.view.ViewGroup.invalidateChild(ViewGroup.java:2511)\n   at android.view.View.invalidate(View.java:5279)\n   at android.widget.TextView.setCompoundDrawables(TextView.java:1535)\n   at android.widget.TextView.setCompoundDrawablesWithIntrinsicBounds(TextView.java:1589)\n   at android.support.v7.internal.view.menu.ActionMenuItemView.setIcon(ActionMenuItemView.java:144)\n   at android.support.v7.internal.view.menu.ActionMenuItemView.initialize(ActionMenuItemView.java:95)\n   at android.support.v7.internal.view.menu.ActionMenuPresenter.bindItemView(ActionMenuPresenter.java:177)\n   at android.support.v7.internal.view.menu.BaseMenuPresenter.getItemView(BaseMenuPresenter.java:180)\n   at android.support.v7.internal.view.menu.ActionMenuPresenter.getItemView(ActionMenuPresenter.java:163)\n   at android.support.v7.internal.view.menu.BaseMenuPresenter.updateMenuView(BaseMenuPresenter.java:100)\n   at android.support.v7.internal.view.menu.ActionMenuPresenter.updateMenuView(ActionMenuPresenter.java:191)\n   at android.support.v7.internal.view.menu.MenuBuilder.dispatchPresenterUpdate(MenuBuilder.java:251)\n   at android.support.v7.internal.view.menu.MenuBuilder.onItemsChanged(MenuBuilder.java:999)\n   at android.support.v7.internal.view.menu.MenuBuilder.startDispatchingItemsChanged(MenuBuilder.java:1022)\n   at android.support.v7.app.ActionBarActivityDelegateBase.preparePanel(ActionBarActivityDelegateBase.java:654)\n   at android.support.v7.app.ActionBarActivityDelegateBase.supportInvalidateOptionsMenu(ActionBarActivityDelegateBase.java:421)\n   at android.support.v7.app.ActionBarActivity.supportInvalidateOptionsMenu(ActionBarActivity.java:172)\n   at cgeo.geocaching.CachePopupFragment$StoreCacheClickListener$2.call(CachePopupFragment.java:149)\n   at rx.internal.schedulers.ScheduledAction.run(ScheduledAction.java:47)\n   ... 8 more\n```\nhttps://github.com/cgeo/cgeo/issues/4524",
   "real": "cgeo.geocaching.CachePopupFragment$StoreCacheClickListener$2.call",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1393,9 +1500,11 @@
    "ch.logixisland.anuto.game.GameManager.setLevel",
    "ch.logixisland.anuto.MainActivity.onCreate"
   ],
+  "year": "2015-11-10T20:11:58Z",
   "crashLog": ": java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState\n    at android.app.FragmentManagerImpl.checkStateLoss(FragmentManager.java:1411)\n    at android.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1429)\n    at android.app.BackStackRecord.commitInternal(BackStackRecord.java:687)\n    at android.app.BackStackRecord.commit(BackStackRecord.java:663)\n    at ch.logixisland.anuto.GameOverFragment.onGameStarted(GameOverFragment.java:59)\n    at ch.logixisland.anuto.game.GameManager.onGameStarted(GameManager.java:522)\n    at ch.logixisland.anuto.game.GameManager.restart(GameManager.java:233)\n    at ch.logixisland.anuto.game.GameManager.setLevel(GameManager.java:252)\n    at ch.logixisland.anuto.MainActivity.onCreate(MainActivity.java:30)\n    ... 12 more\n```\nhttps://github.com/reloZid/android-anuto/issues/1",
   "real": "ch.logixisland.anuto.MainActivity.onCreate",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -1427,15 +1536,18 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2016-05-02T08:16:26Z",
   "crashLog": "I thought we were already handling this...\n\n```\nandroid.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.OPEN_DOCUMENT cat=[android.intent.category.OPENABLE] typ=image/* flg=0x40 (has extras) }\n       at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1665)\n       at android.app.Instrumentation.execStartActivity(Instrumentation.java:1457)\n       at android.app.Activity.startActivityForResult(Activity.java:3474)\n       at android.support.v4.app.ActivityCompatJB.startActivityForResult(ActivityCompatJB.java:30)\n       at android.support.v4.app.ActivityCompat.startActivityForResult(ActivityCompat.java:162)\n       at android.support.v4.app.FragmentActivity.startActivityFromFragment(FragmentActivity.java:922)\n       at android.support.v4.app.FragmentActivity$HostCallbacks.onStartActivityFromFragment(FragmentActivity.java:1010)\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:940)\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:929)\n       at org.kontalk.ui.ComposeMessageFragment.selectGalleryAttachment(ComposeMessageFragment.java:1202)\n       at org.kontalk.ui.ComposeMessageFragment.access$600(ComposeMessageFragment.java:149)\n       at org.kontalk.ui.ComposeMessageFragment$6.onClick(ComposeMessageFragment.java:655)\n       at android.view.View.performClick(View.java:4445)\n       at android.view.View$PerformClick.run(View.java:18446)\n       at android.os.Handler.handleCallback(Handler.java:733)\n       at android.os.Handler.dispatchMessage(Handler.java:95)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5147)\n       at java.lang.reflect.Method.invokeNative(NativeMethod)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:795)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:611)\n```\nhttps://github.com/kontalk/androidclient/issues/709",
   "real": "org.kontalk.ui.ComposeMessageFragment.selectGalleryAttachment",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
   "msg": " Couldn't read row 3, col 6 from CursorWindow.  Make sure the Cursor is initialized correctly before accessing data from it.",
   "identifier": "org.wordpress.android",
   "postURL": "https://github.com/wordpress-mobile/WordPress-Android/issues/2855",
+  "reason": "Since the fix is adding field and adding new method, we consider the constructor is the real location of fix",
   "fileName": "org.wordpress.android-2855",
   "trace": [
    "android.database.CursorWindow.nativeGetString",
@@ -1451,10 +1563,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2015-06-16T00:29:42Z",
   "crashLog": ": java.lang.IllegalStateException: Couldn't read row 3, col 6 from CursorWindow.  Make sure the Cursor is initialized correctly before accessing data from it.\n       at android.database.CursorWindow.nativeGetString(CursorWindow.java)\n       at android.database.CursorWindow.getString(CursorWindow.java:518)\n       at android.database.AbstractWindowedCursor.getString(AbstractWindowedCursor.java:62)\n       at org.wordpress.android.datasets.CommentTable.getCommentFromCursor(CommentTable.java:321)\n       at org.wordpress.android.datasets.CommentTable.getCommentsForBlog(CommentTable.java:140)\n       at org.wordpress.android.ui.comments.CommentAdapter$LoadCommentsTask.doInBackground(CommentAdapter.java:340)\n       at org.wordpress.android.ui.comments.CommentAdapter$LoadCommentsTask.doInBackground(CommentAdapter.java:327)\n       at android.os.AsyncTask$2.call(AsyncTask.java:287)\n       at java.util.concurrent.FutureTask.run(FutureTask.java:234)\n       at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1080)\n       at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:573)\n       at java.lang.Thread.run(Thread.java:838)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/2855",
   "real": "org.wordpress.android.util.SqlUtils.<init>",
-  "reason": "Since the fix is adding field and adding new method, we consider the constructor is the real location of fix",
-  "category": "misuse"
+  "category": "misuse",
+  "realCate": "B"
  },
  {
   "exception": "java.lang.ClassCastException",
@@ -1485,9 +1598,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-08-12T21:19:23Z",
   "crashLog": "The below exception is thrown internally (so the user never sees it, nor does the app crash) with orientation changes:\n\n```\n08-12 17:13:36.368  20568-20568/com.joulespersecond.seattlebusbot W/Bundle? Attempt to cast generated internal exception:\n    java.lang.ClassCastException: java.lang.Float cannot be cast to java.lang.Integer\n            at android.os.Bundle.getInt(Bundle.java:1000)\n            at com.joulespersecond.seattlebusbot.map.StopMapController.setState(StopMapController.java:177)\n            at com.joulespersecond.seattlebusbot.map.googlemapsv1.BaseMapActivity.setMapMode(BaseMapActivity.java:362)\n            at com.joulespersecond.seattlebusbot.map.googlemapsv1.BaseMapActivity.initMap(BaseMapActivity.java:193)\n            at com.joulespersecond.seattlebusbot.map.googlemapsv1.BaseMapActivity.onCreate(BaseMapActivity.java:149)\n            at com.joulespersecond.seattlebusbot.HomeActivity.onCreate(HomeActivity.java:130)\n            at android.app.Activity.performCreate(Activity.java:5231)\n            at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1087)\n            at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2169)\n            at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2264)\n            at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:3755)\n            at android.app.ActivityThread.access$900(ActivityThread.java:144)\n            at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1211)\n            at android.os.Handler.dispatchMessage(Handler.java:102)\n            at android.os.Looper.loop(Looper.java:136)\n            at android.app.ActivityThread.main(ActivityThread.java:5139)\n            at java.lang.reflect.Method.invokeNative(Native Method)\n            at java.lang.reflect.Method.invoke(Method.java:515)\n            at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:796)\n            at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:612)\n            at dalvik.system.NativeStart.main(Native Method)\n```\n\nI missed a Bundle cast when I refactored map zoom from an `int` to a `float`.  I'll submit a PR for this shortly.\nhttps://github.com/OneBusAway/onebusaway-android/issues/168",
   "real": "com.joulespersecond.seattlebusbot.map.StopMapController.setState",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -1505,9 +1620,11 @@
    "cgeo.geocaching.connector.trackable.TravelBugConnector.searchTrackable",
    "cgeo.geocaching.TrackableActivity$LoadTrackableThread.run"
   ],
+  "year": "2014-01-14T06:58:57Z",
   "crashLog": "There has been several instances of this problem. This exception appears when saving a trackable whose geocode appears to be `null`:\n\n```\njava.lang.IllegalArgumentException: the bind value at index 1 is null\n   at android.database.sqlite.SQLiteProgram.bindString(SQLiteProgram.java:164)\n   at cgeo.geocaching.DataStore.saveLogsWithoutTransaction(DataStore.java:1409)\n   at cgeo.geocaching.DataStore.saveInventoryWithoutTransaction(DataStore.java:1494)\n   at cgeo.geocaching.DataStore.saveTrackable(DataStore.java:1455)\n   at cgeo.geocaching.connector.gc.GCParser.parseTrackable(GCParser.java:1602)\n   at cgeo.geocaching.connector.gc.GCParser.searchTrackable(GCParser.java:983)\n   at cgeo.geocaching.connector.trackable.TravelBugConnector.searchTrackable(TravelBugConnector.java:38)\n   at cgeo.geocaching.TrackableActivity$LoadTrackableThread.run(TrackableActivity.java:253)\n```\n\nIndeed, it is not allowed to save a log with a non-existent geocode:\n\n``` java\nprivate static final String dbCreateLogs = \"\"\n        + \"create table \" + dbTableLogs + \" (\"\n        + \"_id integer primary key autoincrement, \"\n        + \"geocode text not null, \"\n        + \"updated long not null, \" // date of save\n        + \"type integer not null default 4, \"\n        + \"author text, \"\n        + \"log text, \"\n        + \"date long, \"\n        + \"found integer not null default 0, \"\n        + \"friend integer \"\n        + \"); \";\n```\nhttps://github.com/cgeo/cgeo/issues/3541",
   "real": "cgeo.geocaching.connector.gc.GCParser.parseTrackable",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.content.ActivityNotFoundException",
@@ -1540,9 +1657,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2016-08-14T16:50:39Z",
   "crashLog": "Verify that this is also handled in the compose activity title.\n\n```\nandroid.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.PICK dat=content://com.android.contacts/contacts }\n       at android.app.Instrumentation.checkStartActivityResult(Instrumentation.java:1632)\n       at android.app.Instrumentation.execStartActivity(Instrumentation.java:1424)\n       at android.app.Activity.startActivityForResult(Activity.java:3424)\n       at android.support.v4.app.ActivityCompatJB.startActivityForResult(ActivityCompatJB.java:30)\n       at android.support.v4.app.ActivityCompat.startActivityForResult(ActivityCompat.java:162)\n       at android.support.v4.app.FragmentActivity.startActivityFromFragment(FragmentActivity.java:921)\n       at android.support.v4.app.FragmentActivity$HostCallbacks.onStartActivityFromFragment(FragmentActivity.java:1009)\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:940)\n       at android.support.v4.app.Fragment.startActivityForResult(Fragment.java:929)\n       at org.kontalk.ui.ComposeMessageFragment.selectContactAttachment(ComposeMessageFragment.java:1215)\n       at org.kontalk.ui.ComposeMessageFragment.access$800(ComposeMessageFragment.java:150)\n       at org.kontalk.ui.ComposeMessageFragment$10.onClick(ComposeMessageFragment.java:686)\n       at android.view.View.performClick(View.java:4443)\n       at android.view.View$PerformClick.run(View.java:18443)\n       at android.os.Handler.handleCallback(Handler.java:733)\n       at android.os.Handler.dispatchMessage(Handler.java:95)\n       at android.os.Looper.loop(Looper.java:136)\n       at android.app.ActivityThread.main(ActivityThread.java:5001)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:811)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:627)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/kontalk/androidclient/issues/782",
   "real": "org.kontalk.ui.ComposeMessageFragment.selectContactAttachment",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1568,9 +1687,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-06-13T04:46:40Z",
   "crashLog": "```\njava.lang.IllegalStateException: Activity has been destroyed\n       at android.support.v4.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1376)\n       at android.support.v4.app.BackStackRecord.commitInternal(BackStackRecord.java:595)\n       at android.support.v4.app.BackStackRecord.commitAllowingStateLoss(BackStackRecord.java:578)\n       at org.wordpress.android.ui.reader.ReaderActivity.showListFragmentForTag(ReaderActivity.java:333)\n       at org.wordpress.android.ui.reader.ReaderActivity.access$200(ReaderActivity.java:42)\n       at org.wordpress.android.ui.reader.ReaderActivity$1.onUpdateResult(ReaderActivity.java:425)\n       at org.wordpress.android.ui.reader.actions.ReaderTagActions$5$1.run(ReaderTagActions.java:220)\n       at android.os.Handler.handleCallback(Handler.java:730)\n       at android.os.Handler.dispatchMessage(Handler.java:92)\n       at android.os.Looper.loop(Looper.java:137)\n       at android.app.ActivityThread.main(ActivityThread.java:5419)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:525)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1187)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1003)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1504",
   "real": "org.wordpress.android.ui.reader.ReaderActivity.showListFragmentForTag",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteDatabaseLockedException",
@@ -1596,9 +1717,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2014-03-09T20:54:28Z",
   "crashLog": "_From [valerio....@gmail.com](https://code.google.com/u/113951661782959023902/) on May 12, 2013 00:11:59_\n\nWhen try to restore the entire old database directory (/data/data/org.kontalk/databases) for recovery old conversation, the application crash because is possible that the folder \"databases\" permission/owner is not set property.\nIf the permission/owner of this directory is wrong a SQLLite exception occurred!\n\n_Original issue: http://code.google.com/p/kontalk/issues/detail?id=76_\n\n---\n\nSeems like more stuff is needed here:\n\n```\nandroid.database.sqlite.SQLiteDatabaseLockedException: database is locked (code 5)\n       at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(SQLiteConnection.java)\n       at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:734)\n       at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)\n       at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)\n       at android.database.sqlite.SQLiteDatabase.updateWithOnConflict(SQLiteDatabase.java:1576)\n       at android.database.sqlite.SQLiteDatabase.update(SQLiteDatabase.java:1522)\n       at org.kontalk.provider.UsersProvider.updateUser(UsersProvider.java:512)\n       at org.kontalk.provider.UsersProvider.update(UsersProvider.java:494)\n       at android.content.ContentProvider$Transport.update(ContentProvider.java:328)\n       at android.content.ContentResolver.update(ContentResolver.java:1333)\n       at org.kontalk.service.msgcenter.PresenceListener.updateUsersDatabase(PresenceListener.java:385)\n       at org.kontalk.service.msgcenter.PresenceListener.access$000(PresenceListener.java:73)\n       at org.kontalk.service.msgcenter.PresenceListener$1.run(PresenceListener.java:276)\n       at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1112)\n       at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:587)\n       at java.lang.Thread.run(Thread.java:818)\n```\n## <bountysource-plugin>\n\nWant to back this issue? **[Post a bounty on it!](https://www.bountysource.com/issues/18980782-database-error-handling?utm_campaign=plugin&utm_content=tracker%2F622720&utm_medium=issues&utm_source=github)** We accept bounties via [Bountysource](https://www.bountysource.com/?utm_campaign=plugin&utm_content=tracker%2F622720&utm_medium=issues&utm_source=github).\n<\/bountysource-plugin>\nhttps://github.com/kontalk/androidclient/issues/46",
   "real": "org.kontalk.provider.UsersProvider.updateUser",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1622,9 +1745,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-02-20T15:18:08Z",
   "crashLog": "needs a hasActivity() test on EditPostContentFragment.processAttachmentsTask.onPostExecute\n\n```\nE/AndroidRuntime(16993): java.lang.IllegalStateException: Fragment EditPostContentFragment{42b58398} not attached to Activity\nE/AndroidRuntime(16993):    at android.support.v4.app.Fragment.getResources(Fragment.java:601)\nE/AndroidRuntime(16993):    at org.wordpress.android.ui.posts.EditPostContentFragment$processAttachmentsTask.onPostExecute(EditPostContentFragment.java:662)\nE/AndroidRuntime(16993):    at org.wordpress.android.ui.posts.EditPostContentFragment$processAttachmentsTask.onPostExecute(EditPostContentFragment.java:634)\nE/AndroidRuntime(16993):    at android.os.AsyncTask.finish(AsyncTask.java:632)\nE/AndroidRuntime(16993):    at android.os.AsyncTask.access$600(AsyncTask.java:177)\nE/AndroidRuntime(16993):    at android.os.AsyncTask$InternalHandler.handleMessage(AsyncTask.java:645)\nE/AndroidRuntime(16993):    at android.os.Handler.dispatchMessage(Handler.java:102)\nE/AndroidRuntime(16993):    at android.os.Looper.loop(Looper.java:136)\nE/AndroidRuntime(16993):    at android.app.ActivityThread.main(ActivityThread.java:5017)\nE/AndroidRuntime(16993):    at java.lang.reflect.Method.invokeNative(Native Method)\nE/AndroidRuntime(16993):    at java.lang.reflect.Method.invoke(Method.java:515)\nE/AndroidRuntime(16993):    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)\nE/AndroidRuntime(16993):    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)\nE/AndroidRuntime(16993):    at dalvik.system.NativeStart.main(Native Method)\nD/dalvikvm( 4667): GC_CONCURRENT freed 1571K, 11% free 21845K/24372K, paused 4ms\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/938",
   "real": "org.wordpress.android.ui.posts.EditPostContentFragment$processAttachmentsTask.onPostExecute",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.ArrayIndexOutOfBoundsException",
@@ -1640,9 +1765,11 @@
    "cgeo.geocaching.utils.RxUtils$LooperCallbacks$1.call",
    "rx.internal.schedulers.ScheduledAction.run"
   ],
+  "year": "2014-12-17T12:33:42Z",
   "crashLog": ": java.lang.ArrayIndexOutOfBoundsException\n   at android.hardware.SensorManager$ListenerDelegate.setDelay(SensorManager.java:596)\n   at android.hardware.SensorManager.registerListener(SensorManager.java:1173)\n   at android.hardware.SensorManager.registerListener(SensorManager.java:1034)\n   at cgeo.geocaching.sensors.RotationProvider.onStart(RotationProvider.java:65)\n   at cgeo.geocaching.utils.RxUtils$LooperCallbacks$1.call(RxUtils.java:94)\n   at rx.internal.schedulers.ScheduledAction.run(ScheduledAction.java:47)\n   ... 4 more\n```\nhttps://github.com/cgeo/cgeo/issues/4541",
   "real": "cgeo.geocaching.sensors.RotationProvider.onStart",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -1666,9 +1793,11 @@
    "org.kontalk.data.Conversation$1.run",
    "java.lang.Thread.run"
   ],
+  "year": "2016-07-01T13:47:38Z",
   "crashLog": "MessagingNotification.sPaused becomes null inside the if (sPaused != null). Wow...\n\n```\njava.lang.IllegalArgumentException: the bind value at index 1 is null\n       at android.database.sqlite.SQLiteProgram.bindString(SQLiteProgram.java:164)\n       at android.database.sqlite.SQLiteProgram.bindAllArgsAsStrings(SQLiteProgram.java:200)\n       at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:47)\n       at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1316)\n       at android.database.sqlite.SQLiteQueryBuilder.query(SQLiteQueryBuilder.java:400)\n       at android.database.sqlite.SQLiteQueryBuilder.query(SQLiteQueryBuilder.java:294)\n       at org.kontalk.provider.MessagesProvider.query(MessagesProvider.java:413)\n       at android.content.ContentProvider.query(ContentProvider.java:1000)\n       at android.content.ContentProvider$Transport.query(ContentProvider.java:214)\n       at android.content.ContentResolver.query(ContentResolver.java:482)\n       at android.content.ContentResolver.query(ContentResolver.java:426)\n       at org.kontalk.ui.MessagingNotification.updateMessagesNotification(MessagingNotification.java:208)\n       at org.kontalk.data.Conversation$1.run(Conversation.java:255)\n       at java.lang.Thread.run(Thread.java:818)\n```\nhttps://github.com/kontalk/androidclient/issues/773",
   "real": "org.kontalk.ui.MessagingNotification.updateMessagesNotification",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1707,9 +1836,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2017-04-22T12:58:24Z",
   "crashLog": " java.lang.IllegalStateException: FragmentManager is already executing transactions\r\n       at android.support.v4.app.FragmentManagerImpl.ensureExecReady(FragmentManager.java:1956)\r\n       at android.support.v4.app.FragmentManagerImpl.execSingleAction(FragmentManager.java:1980)\r\n       at android.support.v4.app.BackStackRecord.commitNow(BackStackRecord.java:620)\r\n       at org.kontalk.ui.AbstractComposeFragment.getAudioFragment(AbstractComposeFragment.java:1083)\r\n       at org.kontalk.ui.AbstractComposeFragment.processArguments(AbstractComposeFragment.java:1388)\r\n       at org.kontalk.ui.AbstractComposeFragment.onActivityCreated(AbstractComposeFragment.java:286)\r\n       at android.support.v4.app.Fragment.performActivityCreated(Fragment.java:2201)\r\n       at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1326)\r\n       at android.support.v4.app.FragmentManagerImpl.moveFragmentToExpectedState(FragmentManager.java:1528)\r\n       at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1595)\r\n       at android.support.v4.app.FragmentManagerImpl.dispatchActivityCreated(FragmentManager.java:2900)\r\n       at android.support.v4.app.FragmentController.dispatchActivityCreated(FragmentController.java:201)\r\n       at android.support.v4.app.FragmentActivity.onStart(FragmentActivity.java:603)\r\n       at android.support.v7.app.AppCompatActivity.onStart(AppCompatActivity.java:178)\r\n       at android.app.Instrumentation.callActivityOnStart(Instrumentation.java:1171)\r\n       at android.app.Activity.performStart(Activity.java:5251)\r\n       at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2203)\r\n       at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2279)\r\n       at android.app.ActivityThread.handleRelaunchActivity(ActivityThread.java:3812)\r\n       at android.app.ActivityThread.access$900(ActivityThread.java:143)\r\n       at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1248)\r\n       at android.os.Handler.dispatchMessage(Handler.java:102)\r\n       at android.os.Looper.loop(Looper.java:136)\r\n       at android.app.ActivityThread.main(ActivityThread.java:5124)\r\n       at java.lang.reflect.Method.invokeNative(Method.java)\r\n       at java.lang.reflect.Method.invoke(Method.java:515)\r\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:797)\r\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:613)\r\n       at dalvik.system.NativeStart.main(NativeStart.java)\r\n```https://github.com/kontalk/androidclient/issues/994",
   "real": "org.kontalk.ui.AbstractComposeFragment.getAudioFragment",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteConstraintException",
@@ -1732,9 +1863,11 @@
    "org.kontalk.sync.SyncAdapter.onPerformSync",
    "android.content.AbstractThreadedSyncAdapter$SyncThread.run"
   ],
+  "year": "2015-06-12T12:20:54Z",
   "crashLog": ": SyncAdapterThread-1\nandroid.database.sqlite.SQLiteConstraintException: column number is not unique (code 19)\n     at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)\n     at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:734)\n     at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)\n     at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)\n     at android.database.sqlite.SQLiteDatabase.updateWithOnConflict(SQLiteDatabase.java:1574)\n     at android.database.sqlite.SQLiteDatabase.update(SQLiteDatabase.java:1520)\n     at org.kontalk.provider.UsersProvider.updateUser(UsersProvider.java:349)\n     at org.kontalk.provider.UsersProvider.update(UsersProvider.java:335)\n     at android.content.ContentProvider$Transport.update(ContentProvider.java:287)\n     at android.content.ContentProviderClient.update(ContentProviderClient.java:251)\n     at org.kontalk.sync.Syncer.performSync(Syncer.java:549)\n     at org.kontalk.sync.SyncAdapter.onPerformSync(SyncAdapter.java:111)\n     at android.content.AbstractThreadedSyncAdapter$SyncThread.run(AbstractThreadedSyncAdapter.java:259)\n```\nhttps://github.com/kontalk/androidclient/issues/454",
   "real": "org.kontalk.sync.Syncer.performSync",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IndexOutOfBoundsException",
@@ -1756,9 +1889,11 @@
    "org.wordpress.android.ui.posts.EditPostActivity$AutoSaveTask.run",
    "java.util.Timer$TimerImpl.run"
   ],
+  "year": "2015-05-14T22:37:19Z",
   "crashLog": "From crashlytics:\n\n```\njava.lang.IndexOutOfBoundsException: getChars (0 ... 25125) ends beyond length 25124\n       at android.text.SpannableStringBuilder.checkRange(SpannableStringBuilder.java:1016)\n       at android.text.SpannableStringBuilder.getChars(SpannableStringBuilder.java:913)\n       at android.text.TextUtils.getChars(TextUtils.java:70)\n       at android.text.SpannableStringBuilder.(SpannableStringBuilder.java:61)\n       at android.text.SpannableStringBuilder.(SpannableStringBuilder.java:44)\n       at org.wordpress.android.ui.posts.EditPostActivity.updatePostContent(EditPostActivity.java:915)\n       at org.wordpress.android.ui.posts.EditPostActivity.updatePostObject(EditPostActivity.java:556)\n       at org.wordpress.android.ui.posts.EditPostActivity.savePost(EditPostActivity.java:569)\n       at org.wordpress.android.ui.posts.EditPostActivity.savePost(EditPostActivity.java:564)\n       at org.wordpress.android.ui.posts.EditPostActivity.access$400(EditPostActivity.java:93)\n       at org.wordpress.android.ui.posts.EditPostActivity$AutoSaveTask.run(EditPostActivity.java:273)\n       at java.util.Timer$TimerImpl.run(Timer.java:284)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/2695",
   "real": "org.wordpress.android.ui.posts.EditPostActivity.updatePostContent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -1783,9 +1918,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2014-07-07T15:01:51Z",
   "crashLog": "```\njava.lang.IllegalArgumentException: no dialog with id 1 was ever shown via Activity#showDialog\n       at android.app.Activity.missingDialog(Activity.java:3164)\n       at android.app.Activity.dismissDialog(Activity.java:3149)\n       at org.wordpress.android.ui.posts.PostsActivity$deletePostTask.onPostExecute(PostsActivity.java:410)\n       at org.wordpress.android.ui.posts.PostsActivity$deletePostTask.onPostExecute(PostsActivity.java:398)\n       at android.os.AsyncTask.finish(AsyncTask.java:632)\n       at android.os.AsyncTask.access$600(AsyncTask.java:177)\n       at android.os.AsyncTask$InternalHandler.handleMessage(AsyncTask.java:645)\n       at android.os.Handler.dispatchMessage(Handler.java:102)\n       at android.os.Looper.loop(Looper.java:212)\n       at android.app.ActivityThread.main(ActivityThread.java:5151)\n       at java.lang.reflect.Method.invokeNative(Method.java)\n       at java.lang.reflect.Method.invoke(Method.java:515)\n       at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:877)\n       at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:693)\n       at dalvik.system.NativeStart.main(NativeStart.java)\n```\nhttps://github.com/wordpress-mobile/WordPress-Android/issues/1590",
   "real": "org.wordpress.android.ui.posts.PostsActivity$deletePostTask.onPostExecute",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.database.sqlite.SQLiteConstraintException",
@@ -1808,9 +1945,11 @@
    "org.kontalk.service.msgcenter.MessageCenterService$8.run",
    "java.lang.Thread.run"
   ],
+  "year": "2015-07-31T15:00:48Z",
   "crashLog": ": Thread-9869\nProcess: org.kontalk, PID: 4537\nandroid.database.sqlite.SQLiteConstraintException: column hash is not unique (code 19)\n    at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)\n    at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:734)\n    at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)\n    at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)\n    at android.database.sqlite.SQLiteDatabase.updateWithOnConflict(SQLiteDatabase.java:1574)\n    at android.database.sqlite.SQLiteDatabase.update(SQLiteDatabase.java:1520)\n    at org.kontalk.provider.UsersProvider.updateUser(UsersProvider.java:349)\n    at org.kontalk.provider.UsersProvider.update(UsersProvider.java:335)\n    at android.content.ContentProvider$Transport.update(ContentProvider.java:287)\n    at android.content.ContentResolver.update(ContentResolver.java:1316)\n    at org.kontalk.provider.UsersProvider.markRegistered(UsersProvider.java:720)\n    at org.kontalk.service.msgcenter.MessageCenterService$8.run(MessageCenterService.java:1994)\n    at java.lang.Thread.run(Thread.java:841)\n```\nhttps://github.com/kontalk/androidclient/issues/526",
   "real": "org.kontalk.service.msgcenter.MessageCenterService$8.run",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.util.AndroidRuntimeException",
@@ -1861,9 +2000,11 @@
    "com.android.internal.os.ZygoteInit.main",
    "dalvik.system.NativeStart.main"
   ],
+  "year": "2015-10-12T20:03:39Z",
   "crashLog": "10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens: onTouchEvent()\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens: android.util.AndroidRuntimeException: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.app.ContextImpl.startActivity(ContextImpl.java:1244)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.app.ContextImpl.startActivity(ContextImpl.java:1231)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.content.ContextWrapper.startActivity(ContextWrapper.java:291)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.text.style.URLSpan.onClick(URLSpan.java:62)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.text.method.LinkMovementMethod.onTouchEvent(LinkMovementMethod.java:212)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.pcinpact.adapters.GestionLiens.onTouchEvent(GestionLiens.java:41)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.widget.TextView.onTouchEvent(TextView.java:8402)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.View.dispatchTouchEvent(View.java:7485)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:2273)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2010)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.android.internal.policy.impl.PhoneWindow$DecorView.superDispatchTouchEvent(PhoneWindow.java:2239)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.android.internal.policy.impl.PhoneWindow.superDispatchTouchEvent(PhoneWindow.java:1534)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.app.Activity.dispatchTouchEvent(Activity.java:2466)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.support.v7.app.ActionBarActivityDelegateICS$WindowCallbackWrapper.dispatchTouchEvent(ActionBarActivityDelegateICS.java:268)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.android.internal.policy.impl.PhoneWindow$DecorView.dispatchTouchEvent(PhoneWindow.java:2187)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.View.dispatchPointerEvent(View.java:7665)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewRootImpl.deliverPointerEvent(ViewRootImpl.java:3813)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewRootImpl.deliverInputEvent(ViewRootImpl.java:3697)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewRootImpl.doProcessInputEvents(ViewRootImpl.java:4935)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewRootImpl.enqueueInputEvent(ViewRootImpl.java:4914)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.ViewRootImpl$WindowInputEventReceiver.onInputEvent(ViewRootImpl.java:5012)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.view.InputEventReceiver.dispatchInputEvent(InputEventReceiver.java:185)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.os.MessageQueue.nativePollOnce(Native Method)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.os.MessageQueue.next(MessageQueue.java:125)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.os.Looper.loop(Looper.java:124)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at android.app.ActivityThread.main(ActivityThread.java:5306)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at java.lang.reflect.Method.invokeNative(Native Method)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at java.lang.reflect.Method.invoke(Method.java:511)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1102)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:869)\n10-12 21:58:56.245 15055-15055/com.pcinpact E/GestionLiens:     at dalvik.system.NativeStart.main(Native Method)\nhttps://github.com/AnaelMobilia/NextINpact-Unofficial/issues/188#issuecomment-147505046",
   "real": "com.pcinpact.adapters.GestionLiens.onTouchEvent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalArgumentException",
@@ -1885,9 +2026,11 @@
    "java.util.concurrent.ThreadPoolExecutor$Worker.run",
    "java.lang.Thread.run"
   ],
+  "year": "2016-01-17T09:07:27Z",
   "crashLog": "There has to be a better way to coordinate than through successive pull requests. :)\n\nThat fixed the export. Now I have an error on import:\n\nE//DefaultRequestRunner.java:154(20427): 01:04:39.139 Thread-17487 An exception occurred during request network execution :the bind value at index 12 is null\nE//DefaultRequestRunner.java:154(20427): java.lang.IllegalArgumentException: the bind value at index 12 is null\nE//DefaultRequestRunner.java:154(20427):    at android.database.sqlite.SQLiteProgram.bindString(SQLiteProgram.java:164)\nE//DefaultRequestRunner.java:154(20427):    at org.fitchfamily.android.wifi_backend.database.Database.insert(Database.java:319)\nE//DefaultRequestRunner.java:154(20427):    at org.fitchfamily.android.wifi_backend.data.ImportSpiceRequest.loadDataFromNetwork(ImportSpiceRequest.java:67)\nE//DefaultRequestRunner.java:154(20427):    at org.fitchfamily.android.wifi_backend.data.ImportSpiceRequest.loadDataFromNetwork(ImportSpiceRequest.java:34)\nE//DefaultRequestRunner.java:154(20427):    at com.octo.android.robospice.request.CachedSpiceRequest.loadDataFromNetwork(CachedSpiceRequest.java:48)\nE//DefaultRequestRunner.java:154(20427):    at com.octo.android.robospice.request.DefaultRequestRunner.processRequest(DefaultRequestRunner.java:150)\nE//DefaultRequestRunner.java:154(20427):    at com.octo.android.robospice.request.DefaultRequestRunner$1.run(DefaultRequestRunner.java:217)\nE//DefaultRequestRunner.java:154(20427):    at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:422)\nE//DefaultRequestRunner.java:154(20427):    at java.util.concurrent.FutureTask.run(FutureTask.java:237)\nE//DefaultRequestRunner.java:154(20427):    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1112)\nE//DefaultRequestRunner.java:154(20427):    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:587)\nE//DefaultRequestRunner.java:154(20427):    at java.lang.Thread.run(Thread.java:818)\nhttps://github.com/n76/wifi_backend/pull/22#issuecomment-172302822",
   "real": "org.fitchfamily.android.wifi_backend.data.ImportSpiceRequest.loadDataFromNetwork",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.ClassCastException",
@@ -1910,9 +2053,11 @@
    "android.app.Activity.performResume",
    "android.app.ActivityThread.performResumeActivity"
   ],
+  "year": "2016-03-09T15:59:57Z",
   "crashLog": ": java.lang.ClassCastException: java.lang.Boolean cannot be cast to java.lang.String\n    at android.app.SharedPreferencesImpl.getString(SharedPreferencesImpl.java:223)\n    at com.nextgis.mobile.fragment.MapFragment.onResume(MapFragment.java:823)\n    at android.support.v4.app.Fragment.performResume(Fragment.java:2008)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1119)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1259)\n    at android.support.v4.app.FragmentManagerImpl.moveToState(FragmentManager.java:1241)\n    at android.support.v4.app.FragmentManagerImpl.dispatchResume(FragmentManager.java:2063)\n    at android.support.v4.app.FragmentController.dispatchResume(FragmentController.java:187)\n    at android.support.v4.app.FragmentActivity.onResumeFragments(FragmentActivity.java:462)\n    at android.support.v4.app.FragmentActivity.onPostResume(FragmentActivity.java:451)\n    at android.support.v7.app.AppCompatActivity.onPostResume(AppCompatActivity.java:141)\n    at android.app.Activity.performResume(Activity.java:6089)\n    at android.app.ActivityThread.performResumeActivity(ActivityThread.java:3039)\n    ... 11 more\n```\nhttps://github.com/nextgis/android_gisapp/issues/346",
   "real": "com.nextgis.mobile.fragment.MapFragment.onResume",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "android.util.AndroidRuntimeException",
@@ -1928,9 +2073,11 @@
    "android.app.Instrumentation.callActivityOnCreate",
    "android.app.ActivityThread.performLaunchActivity"
   ],
+  "year": "2016-01-22T13:25:48Z",
   "crashLog": ": android.util.AndroidRuntimeException: requestFeature() must be called before adding content\nE/AndroidRuntime(17996):    at com.android.internal.policy.impl.PhoneWindow.requestFeature(PhoneWindow.java:306)\nE/AndroidRuntime(17996):    at android.app.Activity.requestWindowFeature(Activity.java:3649)\nE/AndroidRuntime(17996):    at com.seafile.seadroid2.ui.activity.UnlockGesturePasswordActivity.onCreate(UnlockGesturePasswordActivity.java:43)\nE/AndroidRuntime(17996):    at android.app.Activity.performCreate(Activity.java:6034)\nE/AndroidRuntime(17996):    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1111)\nE/AndroidRuntime(17996):    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2332)\nE/AndroidRuntime(17996):    ... 10 more\nhttps://github.com/haiwen/seadroid/issues/474",
   "real": "com.seafile.seadroid2.ui.activity.UnlockGesturePasswordActivity.onCreate",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  },
  {
   "exception": "java.lang.IllegalStateException",
@@ -1960,8 +2107,10 @@
    "com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run",
    "com.android.internal.os.ZygoteInit.main"
   ],
+  "year": "2015-07-19T20:00:02Z",
   "crashLog": "Steps to reproduce:\n1. open a conversation with a contact\n2. go to home screen\n3. receive a message from a user\n4. open conversation from the notification\n\nNew handling of intents doesn't work in certain cases. I'll need to refactor the compose message fragment reloading.\n\n```\njava.lang.IllegalStateException: Can not perform this action after onSaveInstanceState\n    at android.support.v4.app.FragmentManagerImpl.checkStateLoss(FragmentManager.java:1365)\n    at android.support.v4.app.FragmentManagerImpl.enqueueAction(FragmentManager.java:1383)\n    at android.support.v4.app.BackStackRecord.commitInternal(BackStackRecord.java:636)\n    at android.support.v4.app.BackStackRecord.commit(BackStackRecord.java:615)\n    at org.kontalk.ui.ComposeMessage.onNewIntent(ComposeMessage.java:460)\n    at org.kontalk.ui.ComposeMessage.onNewIntent(ComposeMessage.java:445)\n    at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1234)\n    at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1246)\n    at android.app.ActivityThread.deliverNewIntents(ActivityThread.java:2486)\n    at android.app.ActivityThread.performNewIntents(ActivityThread.java:2498)\n    at android.app.ActivityThread.handleNewIntent(ActivityThread.java:2507)\n    at android.app.ActivityThread.access$1600(ActivityThread.java:155)\n    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1389)\n    at android.os.Handler.dispatchMessage(Handler.java:102)\n    at android.os.Looper.loop(Looper.java:135)\n    at android.app.ActivityThread.main(ActivityThread.java:5343)\n    at java.lang.reflect.Method.invoke(Native Method)\n    at java.lang.reflect.Method.invoke(Method.java:372)\n    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:905)\n    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:700)\n```\nhttps://github.com/kontalk/androidclient/issues/511",
   "real": "org.kontalk.ui.ComposeMessage.onNewIntent",
-  "category": "st"
+  "category": "st",
+  "realCate": "A"
  }
 ]
