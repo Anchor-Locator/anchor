@@ -12,7 +12,7 @@ Essential Key-value pairs:
 
 "exception": the exception type (Java class) thrown,
 
-"buggyApi": the framework API that threw the exception, 
+"buggyApi": the (incorrectly used) framework API that is the root cause of the crash, 
 
 "msg": the message composed by Signaler,
 
