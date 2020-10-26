@@ -12,6 +12,8 @@ Essential Key-value pairs:
 
 "exception": the exception type (Java class) thrown,
 
+"buggyApi": the framework API that threw the exception, 
+
 "msg": the message composed by Signaler,
 
 "identifier": app package identifier,
